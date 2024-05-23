@@ -83,20 +83,24 @@ function handleButtonClick(button) {
 }
 
 function handleNumber(numValue) {
-  if (display.innerHTML.length > 6 && firstNumber === null) {
-    return;
-  }
   if (operator && display.innerHTML == firstNumber && secondNumber === null) {
     displayValue = "";
     display.innerHTML = "";
   }
+  
+  if (display.innerHTML.length >= 7) {
+    return;
+  }
+  
   displayValue += numValue;
-  if (firstNumber !== null && secondNumber === null) {
-    secondNumber = displayValue;
-  } else if (firstNumber !== null && secondNumber !== null) {
+  updateDisplay(displayValue);
+
+  if (!operator) {
+    firstNumber = displayValue;
+  } else {
     secondNumber = displayValue;
   }
-  updateDisplay(numValue);
+
   console.log("Display value: ", displayValue, "First number: ", firstNumber, "Second number: ", secondNumber, "Operator: ", operator);
 }
 
@@ -154,6 +158,12 @@ function performCalculationAndUpdate(newSymbol) {
 }
 
 function updateDisplay(number) {
+  if (number.length > 6) {
+    display.innerHTML = number.substring(0, 6); // more solid overflow check
+  } else {
+    display.innerHTML = number;
+  } 
+  
   if (display.innerHTML === "0") {
     display.innerHTML = number;
   } else {
