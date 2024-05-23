@@ -71,6 +71,7 @@ sup {
   padding: 15px 0;
   box-shadow: 0 4px rgba(0, 0, 0, 0.2);
   cursor: pointer;
+  transition: transform 200ms ease;
 }
 
 .button.special {
@@ -79,4 +80,9 @@ sup {
 
 .button.operation {
   background-color: #ff5722;
+}
+
+.button:active,
+.button.keyboard-active {
+  transform: scale(0.8275);
 }

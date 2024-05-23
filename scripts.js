@@ -67,6 +67,21 @@ document.addEventListener("DOMContentLoaded", () => {
   document.addEventListener('keyup', handleGlobalKeyUp);
 });
 
+function handleGlobalKeyDown(e) {
+  const buttonPressed = document.querySelector(`.button[data-key="${e.key}"]`);
+  if (buttonPressed) {
+    buttonPressed.click();
+    buttonPressed.classList.add('keyboard-active');
+  }
+}
+
+function handleGlobalKeyUp(e) {
+  const buttonPressed = document.querySelector(`.button[data-key="${e.key}"]`);
+  if (buttonPressed) {
+    buttonPressed.classList.remove('keyboard-active');
+  }
+}
+
 function setupButtonListeners(buttons) {
   buttons.forEach(button => {
     button.addEventListener("click", () => {
