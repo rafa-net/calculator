@@ -159,7 +159,7 @@ function performCalculationAndUpdate(newSymbol) {
     let result = operate(operator, firstNumber, secondNumber);
     displayValue = formatResult(result);  // new result formatting function
     updateDisplay(displayValue);
-    firstNumber = result;
+    firstNumber = displayValue;
     displayValue = "";
   } else if (firstNumber === null) {
     firstNumber = displayValue;
@@ -168,30 +168,25 @@ function performCalculationAndUpdate(newSymbol) {
 }
 
 function formatResult(result) {
+  let resultStr = result.toString();
+  let [integerPart, fractionalPart] = resultStr.split(".");
+  fractionalPart = fractionalPart || "";
   if (Number.isInteger(result)) {
-    return result.toString();  // return integers as strings
-  } else {
-    let resultString = result.toString();
-    let [integerPart, fractionalPart] = resultString.split(".");
-    fractionalPart = fractionalPart || "";  // handle undefined fractional part
-    let maxDecimalPlaces = 6 - (integerPart.length);
-    if (maxDecimalPlaces < 0) {
-      maxDecimalPlaces = 0;
-    }
-    return result.toFixed(maxDecimalPlaces);
+    return resultStr.length > 7 ? resultStr.substring(0, 7) : resultStr;
   }
+  let maxDecimalPlaces = 6 - (integerPart.length);
+  if (maxDecimalPlaces < 0) {
+    maxDecimalPlaces = 0;
+  }
+  return result.toFixed(maxDecimalPlaces);
 }
 
 function updateDisplay(number) {
-  if (number.length > 6) {
-    display.innerHTML = number.substring(0, 6); // more solid overflow check
-  } else {
-    display.innerHTML = number;
+  let displayValue = number.toString();
+  if (displayValue.length > 7) {
+    displayValue = displayValue.substring(0, 7);
   }
-
-  if (display.innerHTML === "0") {
-    display.innerHTML = number;
-  } else {
+  if (display.innerHTML !== displayValue) {
     display.innerHTML = displayValue;
   }
 }
