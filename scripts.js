@@ -90,6 +90,17 @@ function handleSpecial(value) {
     case "AC":
       clearAll();
       break;
+    case "CE":
+      clearOne();
+      break;
+    case ".":
+      if (!displayValue.includes(".")) {
+        displayValue += ".";
+      }
+      updateDisplay();
+      break;
+    case "=":
+
     }
 }
 
@@ -112,4 +123,14 @@ function clearAll() {
   secondNumber = null;
   displayValue = "";
   display.innerHTML = "0";
+}
+
+function clearOne() {
+  if (display.innerHTML.length === 1 || display.innerHTML === 0) {
+    displayValue = "";
+    display.innerHTML = "0";
+  } else {
+    displayValue = display.innerHTML.slice(0, -1);
+    updateDisplay(displayValue);
+  }
 }
