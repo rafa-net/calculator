@@ -64,7 +64,7 @@ function setupButtonListeners(buttons) {
 function handleButtonClick(button) {
   const value = button.dataset.value; // here is one of the cruxes of the code, the statement that contains the button value is stored in a variable that is passed to different function representing the 3 different inputs
   console.log("Button clicked! Value: ", value);
-  
+
   if (button.classList.contains("number")) {
     handleNumber(value); // code for numbers
   } else if (button.classList.contains("special")) {
@@ -80,9 +80,20 @@ function handleNumber(numValue) {
   if (display.innerHTML.length > 6) {
     return;
   }
-  displayValue += numValue;
-  updateDisplay(numValue);
+} // automatic screen populating after user types the first number and presses an operator
+if (operator && display.innerHTML == firstNumber && secondNumber === null) {
+  displayValue = "";
+  display.innerHTML = "";
 }
+displayValue += numValue;
+if (firstNumber !== null && secondNumber === null) { // check for the first calculation and update the second number
+  secondNumber = displayValue;
+} else if (firstNumber !== null && secondNumber !== null) { // first number is the "primary memory", stays static, second number gets refreshed in real time...
+  secondNumber = displayValue; // ...because display value always gets updated first, by appending the contents of numValue (immediate user input) onto itself, it is the guiding light of this code, and the value all variables orbit around
+  updateDisplay(numValue);
+  console.log("Display value: ", displayValue, "First number: ", firstNumber, "Second number: ", secondNumber, "Operator: ", operator);
+}
+
 
 // AC, CE, floats and equals
 function handleSpecial(value) {
@@ -101,12 +112,12 @@ function handleSpecial(value) {
       break;
     case "=":
 
-    }
+  }
 }
 
 // +, -, *, /, etc.
 function handleOperation(value) {
-  
+
 }
 
 function updateDisplay(number) {
