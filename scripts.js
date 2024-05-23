@@ -6,6 +6,8 @@ const display = document.getElementById("display");
 let firstNumber = null;
 let operator = null;
 let secondNumber = null;
+let lastOperator = null;
+let lastSecondNumber = null;
 let awaitingNewInput = null;
 let displayValue = "";
 
