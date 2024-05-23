@@ -72,3 +72,11 @@ sup {
   box-shadow: 0 4px rgba(0, 0, 0, 0.2);
   cursor: pointer;
 }
+
+.button.special {
+  background-color: #009688;
+}
+
+.button.operation {
+  background-color: #ff5722;
+}
