@@ -74,6 +74,21 @@ function handleButtonClick(button) {
   }
 }
 
+// declare function to handle numbers, which is the most common input
+function handleNumber(value) {
+
+}
+
+// AC, CE, floats and equals
+function handleSpecial(value) {
+
+}
+
+// +, -, *, /, etc.
+function handleOperation(value) {
+
+}
+
 updateDisplay() {
 
 }
