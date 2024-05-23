@@ -74,26 +74,23 @@ function handleButtonClick(button) {
   }
 }
 
-// declare function to handle numbers, which is the most common input
 function handleNumber(numValue) {
-  // check for overflow here
   if (display.innerHTML.length > 6) {
     return;
+  } 
+  if (operator && display.innerHTML == firstNumber && secondNumber === null) {
+    displayValue = "";
+    display.innerHTML = "";
   }
-} // automatic screen populating after user types the first number and presses an operator
-if (operator && display.innerHTML == firstNumber && secondNumber === null) {
-  displayValue = "";
-  display.innerHTML = "";
+  displayValue += numValue;
+  if (firstNumber !== null && secondNumber === null) {
+    secondNumber = displayValue;
+  } else if (firstNumber !== null && secondNumber !== null) {
+    secondNumber = displayValue;
+  }
+    updateDisplay(numValue);
+    console.log("Display value: ", displayValue, "First number: ", firstNumber, "Second number: ", secondNumber, "Operator: ", operator);
 }
-displayValue += numValue;
-if (firstNumber !== null && secondNumber === null) { // check for the first calculation and update the second number
-  secondNumber = displayValue;
-} else if (firstNumber !== null && secondNumber !== null) { // first number is the "primary memory", stays static, second number gets refreshed in real time...
-  secondNumber = displayValue; // ...because display value always gets updated first, by appending the contents of numValue (immediate user input) onto itself, it is the guiding light of this code, and the value all variables orbit around
-  updateDisplay(numValue);
-  console.log("Display value: ", displayValue, "First number: ", firstNumber, "Second number: ", secondNumber, "Operator: ", operator);
-}
-
 
 // AC, CE, floats and equals
 function handleSpecial(specialValue) {
@@ -124,12 +121,14 @@ function handleOperation(symbol) {
 function performCalculationAndUpdate(symbol) {
   if (operator && firstNumber !== null && displayValue !== "") {
     secondNumber = displayValue;
+  } else if (!firstNumber) {
+    firstNumber = displayValue;
+    operator = symbol;
+    displayValue = "";
+  } else {
+    displayValue = String(operate(operator, firstNumber, secondNumber));
+    performCalculationAndUpdate(symbol);
   }
-  displayValue = String(operate(operator, firstNumber, secondNumber));
-  updateDisplay(displayValue);
-  firstNumber = displayValue;
-  operator = symbol;
-  displayValue = "";
 }
 
 function updateDisplay(number) {
