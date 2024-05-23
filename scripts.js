@@ -64,6 +64,13 @@ function setupButtonListeners(buttons) {
 function handleButtonClick(button) {
   const value = button.dataset.value; // here is one of the cruxes of the code, the statement that contains the button value is stored in a variable that is passed to different function representing the 3 different inputs
   console.log("Button clicked! Value: ", value);
+  // check for overflow here
+  if (display.innerHTML.length > 6) {
+    if (displayValue.includes(".")) {
+      return;
+    }
+    return;
+  }
 
   if (button.classList.contains("number")) {
     handleNumber(value); // code for numbers
