@@ -21,6 +21,10 @@ body {
   background-color: beige;
 }
 
+sup {
+  font-size: 0.5em;
+}
+
 .container {
   display: flex;
   flex-direction: column;
@@ -28,7 +32,7 @@ body {
   background: linear-gradient(145deg, #757575, #424242);
   width: 360px;
   border-radius: 10px;
-  padding: 20px;
+  padding: 10px;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
 }
 
