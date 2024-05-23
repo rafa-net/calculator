@@ -87,7 +87,7 @@ function handleNumber(numValue) {
     displayValue = "";
     display.innerHTML = "";
   }
-  
+
   if (display.innerHTML.length >= 7) {
     return;
   }
@@ -136,15 +136,22 @@ function performCalculationAndUpdate(newSymbol) {
       secondNumber = displayValue;
     }
     let result = operate(operator, firstNumber, secondNumber);
+    if (Number.isInteger(result)) {
+      displayValue = result;
+      updateDisplay(displayValue);
+      firstNumber = result.toString();
+      displayValue = "";
+      operator = newSymbol;
+      return;
+    }
     let resultString = result.toString();
-    // use array destructuring assignment to decompose decimal into fractional part and integer part
     let [integerPart, fractionalPart] = resultString.split(".");
     if (!fractionalPart) {
       fractionalPart = "";
     }
-    let maxDecimalPlaces = 6 - (integerPart.length); // 6 = display size, integerPart.length + floating point string (represented by 1) = size of integer + floating point; 6 - size of integer + floating point = remaining space for decimal places
+    let maxDecimalPlaces = 6 - (integerPart.length);
     if (maxDecimalPlaces < 0) {
-      maxDecimalPlaces = 0; // if the length of the integer part + decimal point alone exceeds the display, convert to integer?
+      maxDecimalPlaces = 0;
     }
     displayValue = result.toFixed(maxDecimalPlaces);
     updateDisplay(displayValue);
