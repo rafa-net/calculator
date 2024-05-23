@@ -64,14 +64,7 @@ function setupButtonListeners(buttons) {
 function handleButtonClick(button) {
   const value = button.dataset.value; // here is one of the cruxes of the code, the statement that contains the button value is stored in a variable that is passed to different function representing the 3 different inputs
   console.log("Button clicked! Value: ", value);
-  // check for overflow here
-  if (display.innerHTML.length > 6) {
-    if (displayValue.includes(".")) {
-      return;
-    }
-    return;
-  }
-
+  
   if (button.classList.contains("number")) {
     handleNumber(value); // code for numbers
   } else if (button.classList.contains("special")) {
@@ -83,6 +76,10 @@ function handleButtonClick(button) {
 
 // declare function to handle numbers, which is the most common input
 function handleNumber(numValue) {
+  // check for overflow here
+  if (display.innerHTML.length > 6) {
+    return;
+  }
   displayValue += numValue;
   updateDisplay(numValue);
 }
@@ -93,12 +90,12 @@ function handleSpecial(value) {
     case "AC":
       clearAll();
       break;
-  }
+    }
 }
 
 // +, -, *, /, etc.
 function handleOperation(value) {
-
+  
 }
 
 function updateDisplay(number) {
