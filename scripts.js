@@ -132,6 +132,7 @@ function performCalculationAndUpdate(newSymbol) {
     firstNumber = displayValue;
   }
   operator = newSymbol;
+  console.log("The operator is: ", operator)
 }
 
 function updateDisplay(number) {
