@@ -1,3 +1,9 @@
+// store relevant nodes in useful variables
+const numberButtons = document.querySelectorAll(".button.number");
+const specialButtons = document.querySelectorAll('.button.special');
+const operatorButtons = document.querySelectorAll('.button.operation');
+const display = document.getElementById("display");
+
 // initialize main variables to null for complete erasing of the memory
 let firstNumber = null;
 let operator = null;
@@ -40,5 +46,5 @@ function operate(op, a, b) {
 }
 
 updateDisplay() {
-  
+
 }
