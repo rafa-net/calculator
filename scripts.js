@@ -141,33 +141,47 @@ function handleSpecial(specialValue) {
       updateDisplay();
       break;
     case "=":
-      if (operator && firstNumber !== null) {
-        displayValue = String(operate(operator, firstNumber, lastSecondNumber));
-        updateDisplay(displayValue);
-        firstNumber = displayValue;
-        displayValue = "";
-      }
+      performCalculationAndUpdate(null);
     break;
   }
 }
 
 // +, -, *, /, etc.
 function handleOperator(symbol) {
-  if (operator && firstNumber !== null && displayValue !== firstNumber) {
-    secondNumber = displayValue;
-    displayValue = String(operate(operator, firstNumber, secondNumber));
-    updateDisplay(displayValue);
-    firstNumber = displayValue;
-    operator = symbol;
-    displayValue = "";
-  } else {
-    if (firstNumber === null) {
-      firstNumber = displayValue;
+  performCalculationAndUpdate(symbol);
+}
+
+function performCalculationAndUpdate(newSymbol) {
+  if (operator && firstNumber !== null) {
+    if (displayValue !== "") {
+      secondNumber = displayValue;
     }
-    operator = symbol;
+    let result = operate(operator, firstNumber, secondNumber);
+    displayValue = formatResult(result);  // new result formatting function
+    updateDisplay(displayValue);
+    firstNumber = result;
     displayValue = "";
+  } else if (firstNumber === null) {
+    firstNumber = displayValue;
+  }
+  operator = newSymbol;
+}
+
+function formatResult(result) {
+  if (Number.isInteger(result)) {
+    return result.toString();  // return integers as strings
+  } else {
+    let resultString = result.toString();
+    let [integerPart, fractionalPart] = resultString.split(".");
+    fractionalPart = fractionalPart || "";  // handle undefined fractional part
+    let maxDecimalPlaces = 6 - (integerPart.length);
+    if (maxDecimalPlaces < 0) {
+      maxDecimalPlaces = 0;
+    }
+    return result.toFixed(maxDecimalPlaces);
   }
 }
+
 
 function updateDisplay(number) {
   displayValue = number.toString();
