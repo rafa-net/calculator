@@ -63,6 +63,8 @@ document.addEventListener("DOMContentLoaded", () => {
   setupButtonListeners(numberButtons);
   setupButtonListeners(specialButtons);
   setupButtonListeners(operatorButtons);
+  document.addEventListener('keydown', handleGlobalKeyDown);
+  document.addEventListener('keyup', handleGlobalKeyUp);
 });
 
 function setupButtonListeners(buttons) {
