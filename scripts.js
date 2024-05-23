@@ -109,10 +109,6 @@ function handleNumber(numValue) {
     display.innerHTML = "";
   }
 
-  if (display.innerHTML.length > 7) {
-    return;
-  }
-
   displayValue += numValue;
   updateDisplay(displayValue);
 
