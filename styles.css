@@ -32,7 +32,7 @@ sup {
   background: linear-gradient(145deg, #757575, #424242);
   width: 360px;
   border-radius: 10px;
-  padding: 10px;
+  padding: 18px 10px;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
 }
 
@@ -92,4 +92,35 @@ sup {
 .button.keyboard-active {
   transform: scale(0.8);
   filter: brightness(0.8);
+}
+
+#top-wrapper,
+#icons-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.top-icons {
+  margin-bottom: 4em;
+}
+
+#icons-container {
+  margin-top: 4em;
+}
+
+.top-content,
+#icons-exponentiation,
+#icons-ac,
+#icons-ce {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 20px;
+  padding: 5px 30px;
+}
+
+div#icons-ce {
+  margin-top: 6px;
 }
