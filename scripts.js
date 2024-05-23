@@ -75,8 +75,9 @@ function handleButtonClick(button) {
 }
 
 // declare function to handle numbers, which is the most common input
-function handleNumber(value) {
-
+function handleNumber(numValue) {
+  displayValue += numValue;
+  updateDisplay(numValue);
 }
 
 // AC, CE, floats and equals
@@ -89,6 +90,10 @@ function handleOperation(value) {
 
 }
 
-updateDisplay() {
-
+function updateDisplay(number) {
+  if (display.innerHTML === "0") {
+    display.innerHTML = number;
+  } else {
+    display.innerHTML = displayValue;
+  }
 }
