@@ -111,7 +111,14 @@ function handleSpecial(specialValue) {
       updateDisplay();
       break;
     case "=":
-
+      if (operator && firstNumber !== null) { 
+        secondNumber = displayValue; // assign the display value to second number, this is the case of a normal calculation flow: 'number, operator, number, equals'
+      }
+      displayValue = operate(operator, firstNumber, secondNumber); // all three data present; time to operate and simulaneously assign the results to display value for
+      updateDisplay(displayValue); // ... updating the display
+      firstNumber = displayValue; // ... using the value as the first number of the subsequent operations
+      displayValue = ""; // purge display value
+      break;
   }
 }
 
