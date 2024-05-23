@@ -118,18 +118,31 @@ function handleOperation(symbol) {
   performCalculationAndUpdate(symbol);
 }
 
-function performCalculationAndUpdate(symbol) {
-  if (operator && firstNumber !== null && displayValue !== "") {
-    secondNumber = displayValue;
-  } else if (!firstNumber) {
-    firstNumber = displayValue;
-    operator = symbol;
-    displayValue = "";
-  } else {
-    displayValue = String(operate(operator, firstNumber, secondNumber));
-    performCalculationAndUpdate(symbol);
-  }
+function performCalculationAndUpdate(newSymbol) {
+    if (operator && firstNumber !== null) {
+        if (displayValue !== "") {
+            secondNumber = displayValue;
+        }
+        let result = operate(operator, firstNumber, secondNumber);
+        if (!Number.isInteger(result)) {
+          displayValue = String(result.toFixed(1));
+          updateDisplay(displayValue);
+          firstNumber = result;
+          displayValue = "";
+          return;
+        }
+        displayValue = String(result);
+        updateDisplay(displayValue);
+        firstNumber = result;
+        displayValue = "";
+    } else {
+        if (firstNumber === null) {
+            firstNumber = displayValue;
+        }
+    }
+    operator = newSymbol;
 }
+
 
 function updateDisplay(number) {
   if (display.innerHTML === "0") {
