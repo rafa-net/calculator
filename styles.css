@@ -6,3 +6,16 @@
   margin: 0;
   padding: 0;
 }
+
+html, 
+body {
+  height: 100%; /* ensuring full viewport coverage */
+  min-height: 100vh;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
