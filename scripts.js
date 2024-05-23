@@ -111,34 +111,25 @@ function handleSpecial(specialValue) {
       updateDisplay();
       break;
     case "=":
-      if (operator && firstNumber !== null) { 
-        secondNumber = displayValue; // assign the display value to second number, this is the case of a normal calculation flow: 'number, operator, number, equals'
-      }
-      displayValue = operate(operator, firstNumber, secondNumber); // all three data present; time to operate and simulaneously assign the results to display value for
-      updateDisplay(displayValue); // ... updating the display
-      firstNumber = displayValue; // ... using the value as the first number of the subsequent operations
-      displayValue = ""; // purge display value
+      performCalculationAndUpdate(null);
       break;
   }
 }
 
 // +, -, *, /, etc.
 function handleOperation(symbol) {
-  if (operator && firstNumber !== null && displayValue !== firstNumber) { // first number already present, let's try to update the second number without checking it, even if we did check it, its value is irrelevant, an operator was pressed and a first number is present, so we need to update the second number accordingly
-    secondNumber = displayValue; // we have the three pieces of data, operate every time this happens
-    displayValue = String(operate(operator, firstNumber, secondNumber)); // operate and store the results on display value to update the display and use in the next calculation
-    updateDisplay(displayValue); // update the display
+  performCalculationAndUpdate(symbol);
+}
 
-    firstNumber = displayValue; // update the first number, by storing within it the result of the previous calculation for usage in the next
-    operator = symbol; // update operator with the one just pressed that triggered the function: first number and operator are now fresh, time to fetch the second number
-    displayValue = ""; // this clears the screen on subsequent button presses, thus making the calculator realistic but pragmatically this purges the value of the variable to prepare to receive the second number
-  } 
-  
-  else if (firstNumber === null) { // first number absent; it's the first calculation
-    firstNumber = displayValue; // update the first number by storing within it the updated result of the display value, which represents the updated operand chosen by the user
-  } 
-  operator = symbol; // replace previous operator, if any, with the current
-  displayValue = ""; // prepare to receive the second number     
+function performCalculationAndUpdate(symbol) {
+  if (operator && firstNumber !== null && displayValue !== "") {
+    secondNumber = displayValue;
+  }
+  displayValue = String(operate(operator, firstNumber, secondNumber));
+  updateDisplay(displayValue);
+  firstNumber = displayValue;
+  operator = symbol;
+  displayValue = "";
 }
 
 function updateDisplay(number) {
