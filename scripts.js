@@ -96,8 +96,8 @@ if (firstNumber !== null && secondNumber === null) { // check for the first calc
 
 
 // AC, CE, floats and equals
-function handleSpecial(value) {
-  switch (value) {
+function handleSpecial(specialValue) {
+  switch (specialValue) {
     case "AC":
       clearAll();
       break;
@@ -116,8 +116,22 @@ function handleSpecial(value) {
 }
 
 // +, -, *, /, etc.
-function handleOperation(value) {
+function handleOperation(symbol) {
+  if (operator && firstNumber !== null && displayValue !== firstNumber) { // first number already present, let's try to update the second number without checking it, even if we did check it, its value is irrelevant, an operator was pressed and a first number is present, so we need to update the second number accordingly
+    secondNumber = displayValue; // we have the three pieces of data, operate every time this happens
+    displayValue = String(operate(operator, firstNumber, secondNumber)); // operate and store the results on display value to update the display and use in the next calculation
+    updateDisplay(displayValue); // update the display
 
+    firstNumber = displayValue; // update the first number, by storing within it the result of the previous calculation for usage in the next
+    operator = symbol; // update operator with the one just pressed that triggered the function: first number and operator are now fresh, time to fetch the second number
+    displayValue = ""; // this clears the screen on subsequent button presses, thus making the calculator realistic but pragmatically this purges the value of the variable to prepare to receive the second number
+  } 
+  
+  else if (firstNumber === null) { // first number absent; it's the first calculation
+    firstNumber = displayValue; // update the first number by storing within it the updated result of the display value, which represents the updated operand chosen by the user
+  } 
+  operator = symbol; // replace previous operator, if any, with the current
+  displayValue = ""; // prepare to receive the second number     
 }
 
 function updateDisplay(number) {
