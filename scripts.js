@@ -6,6 +6,7 @@ const display = document.getElementById("display");
 let firstNumber = null;
 let operator = null;
 let secondNumber = null;
+let awaitingNewInput = null;
 let displayValue = "";
 
 function add(a, b) {
@@ -99,23 +100,24 @@ function handleButtonClick(button) {
   }
 }
 
-// Calculator logic begins here
 function handleNumber(numValue) {
-  if (operator && display.innerHTML == firstNumber && secondNumber === null) {
-    displayValue = "";
-    display.innerHTML = "";
+  if (awaitingNewInput) {
+    displayValue = numValue; 
+    updateDisplay(displayValue);
+    awaitingNewInput = false;
+  } else {
+    displayValue += numValue;
+    updateDisplay(displayValue);
   }
-
-  displayValue += numValue;
-  updateDisplay(displayValue);
-
+  if (operator && display.innerHTML === firstNumber && secondNumber === null) {
+    displayValue = numValue;
+    updateDisplay(displayValue);
+  }
   if (!operator) {
-    firstNumber = displayValue;
+    firstNumber = displayValue;  
   } else {
     secondNumber = displayValue;
   }
-
-  console.log("Display value: ", displayValue, "First number: ", firstNumber, "Second number: ", secondNumber, "Operator: ", operator);
 }
 
 function handleSpecial(specialValue) {
@@ -133,58 +135,27 @@ function handleSpecial(specialValue) {
       updateDisplay();
       break;
     case "=":
-      performCalculationAndUpdate(null);
-    break;
+      handleOperator(null);
+      break;
   }
 }
 
 function handleOperator(symbol) {
-  performCalculationAndUpdate(symbol);
-}
-
-function performCalculationAndUpdate(newSymbol) {
   if (operator && firstNumber !== null) {
     if (displayValue !== "") {
       secondNumber = displayValue;
+      let result = operate(operator, firstNumber, secondNumber);
+      displayValue = formatResult(result);
+      updateDisplay(displayValue);
+      firstNumber = result;
     }
-    let result = operate(operator, firstNumber, secondNumber);
-    displayValue = formatResult(result);
-    updateDisplay(displayValue);
-    firstNumber = result;
     displayValue = "";
-  } else if (firstNumber === null) {
+  } else if (firstNumber === null && displayValue !== "") {
     firstNumber = displayValue;
-  }
-  operator = newSymbol;
-}
-
-function updateDisplay(number) {
-  displayValue = number.toString();
-  if (displayValue.length > 7) {
-    displayValue = displayValue.substring(0, 7);
-  }
-  if (display.innerHTML !== displayValue) {
-    display.innerHTML = displayValue;
-  }
-}
-
-// Utility functions
-function clearAll() {
-  firstNumber = null;
-  operator = null;
-  secondNumber = null;
-  displayValue = "";
-  display.innerHTML = "0";
-}
-
-function clearOne() {
-  if (display.innerHTML.length === 1 || display.innerHTML === "0") {
     displayValue = "";
-    display.innerHTML = "0";
-  } else {
-    displayValue = display.innerHTML.slice(0, -1);
-    updateDisplay(displayValue);
   }
+  operator = symbol;
+  awaitingNewInput = true;
 }
 
 function formatResult(result) {
@@ -199,5 +170,55 @@ function formatResult(result) {
       maxDecimalPlaces = 0;
     }
     return result.toFixed(maxDecimalPlaces);
+  }
+}
+
+function clearAll() {
+  firstNumber = null;
+  operator = null;
+  secondNumber = null;
+  awaitingNewInput = null;
+  displayValue = "";
+  display.innerHTML = "0";
+}
+
+function clearOne() {
+  if (display.innerHTML.length === 1 || display.innerHTML === "0") {
+
+    displayValue = "";
+    display.innerHTML = "0";
+
+    if (operator) {
+      secondNumber = null;
+    } else {
+      firstNumber = null;
+    }
+  } else {
+
+    displayValue = display.innerHTML.slice(0, -1);
+
+
+    if (operator) {
+      secondNumber = displayValue;
+    } else {
+      firstNumber = displayValue;
+    }
+    updateDisplay(displayValue);
+  }
+
+  console.log("Display value:", displayValue, "First number:", firstNumber, "Second number:", secondNumber, "Operator:", operator);
+}
+
+function updateDisplay(value) {
+  if (awaitingNewInput) {
+    display.innerHTML = "";
+    awaitingNewInput = false; 
+  }
+  displayValue = value.toString();
+  if (displayValue.length > 7) {
+    displayValue = displayValue.substring(0, 7);
+  }
+  if (display.innerHTML !== displayValue) {
+    display.innerHTML = displayValue;
   }
 }
