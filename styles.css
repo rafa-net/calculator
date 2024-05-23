@@ -55,8 +55,11 @@ sup {
   font-size: 4.5em;
   background-color: #e0e0e0;
   width: 100%;
-  border-radius: 5px;
   height: 60px;
+  border-radius: 5px;
+  padding: 40px 10px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
 .button {
