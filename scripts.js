@@ -8,6 +8,7 @@ const display = document.getElementById("display");
 let firstNumber = null;
 let operator = null;
 let secondNumber = null;
+let displayValue = "";
 
 // basic arithmetical function declarations for clarity
 function add(a, b) {
