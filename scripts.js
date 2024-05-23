@@ -46,6 +46,10 @@ function operate(op, a, b) {
   } else if (op === "*") {
     return multiply(a, b);
   } else if (op === "/") {
+    if (b === 0) {
+      alert(`Oops! Dividing ${a} by ${b} is like trying to split zero cookies among friends—it just doesn't work. Try a different divisor.`);
+      return 0;
+    }
     return divide(a, b);
   } else if (op === "**") {
     return power(a, b);
@@ -91,7 +95,7 @@ function handleNumber(numValue) {
   if (display.innerHTML.length >= 7) {
     return;
   }
-  
+
   displayValue += numValue;
   updateDisplay(displayValue);
 
@@ -139,7 +143,7 @@ function performCalculationAndUpdate(newSymbol) {
     displayValue = formatResult(result);  // new result formatting function
     updateDisplay(displayValue);
     firstNumber = result;
-    displayValue = ""; 
+    displayValue = "";
   } else if (firstNumber === null) {
     firstNumber = displayValue;
   }
@@ -161,14 +165,13 @@ function formatResult(result) {
   }
 }
 
-
 function updateDisplay(number) {
   if (number.length > 6) {
     display.innerHTML = number.substring(0, 6); // more solid overflow check
   } else {
     display.innerHTML = number;
-  } 
-  
+  }
+
   if (display.innerHTML === "0") {
     display.innerHTML = number;
   } else {
