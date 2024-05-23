@@ -21,13 +21,47 @@ body {
   background-color: beige;
 }
 
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: linear-gradient(145deg, #757575, #424242);
+  width: 360px;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+}
+
 .calculator {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 8px;
-  width: 100%; /* occupy all space within container */
   background-color: #9e9e9e;
+  width: 100%; /* occupy all space within container */
   border-radius: 6px;
   padding: 20px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+}
+
+.display {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end; /* moves the display content to the far right */
+  font-weight: 300;
+  font-size: 4.5em;
+  background-color: #e0e0e0;
+  width: 100%;
+  border-radius: 5px;
+  height: 60px;
+}
+
+.button {
+  font-size: 1.5em;
+  background-color: #616161;
+  color: white;
+  width: 100%;
+  border-radius: 5px;
+  padding: 15px 0;
+  box-shadow: 0 4px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
 }
