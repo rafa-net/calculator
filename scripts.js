@@ -38,3 +38,7 @@ function operate(op, a, b) {
     return percentage(a, b);
   }
 }
+
+updateDisplay() {
+  
+}
