@@ -1,7 +1,7 @@
 // store relevant nodes in useful variables
 const numberButtons = document.querySelectorAll(".button.number");
 const specialButtons = document.querySelectorAll('.button.special');
-const operatorButtons = document.querySelectorAll('.button.operation');
+const operatorButtons = document.querySelectorAll('.button.operator');
 const display = document.getElementById("display");
 
 // initialize main variables to null for complete erasing of the memory
@@ -98,8 +98,8 @@ function handleButtonClick(button) {
     handleNumber(value); // code for numbers
   } else if (button.classList.contains("special")) {
     handleSpecial(value); // code for equals etc.
-  } else if (button.classList.contains("operation")) {
-    handleOperation(value); // code for operators
+  } else if (button.classList.contains("operator")) {
+    handleOperator(value); // code for operators
   }
 }
 
@@ -141,16 +141,36 @@ function handleSpecial(specialValue) {
       updateDisplay();
       break;
     case "=":
+      if (operator && firstNumber !== null) {
+        displayValue = String(operate(operator, firstNumber, lastSecondNumber));
+        updateDisplay(displayValue);
+        firstNumber = displayValue;
+        displayValue = "";
+      }
+    break;
   }
 }
 
 // +, -, *, /, etc.
-function handleOperation(symbol) {
-  
+function handleOperator(symbol) {
+  if (operator && firstNumber !== null && displayValue !== firstNumber) {
+    secondNumber = displayValue;
+    displayValue = String(operate(operator, firstNumber, secondNumber));
+    updateDisplay(displayValue);
+    firstNumber = displayValue;
+    operator = symbol;
+    displayValue = "";
+  } else {
+    if (firstNumber === null) {
+      firstNumber = displayValue;
+    }
+    operator = symbol;
+    displayValue = "";
+  }
 }
 
 function updateDisplay(number) {
-  let displayValue = number.toString();
+  displayValue = number.toString();
   if (displayValue.length > 7) {
     displayValue = displayValue.substring(0, 7);
   }
