@@ -77,7 +77,7 @@ function handleButtonClick(button) {
 function handleNumber(numValue) {
   if (display.innerHTML.length > 6) {
     return;
-  } 
+  }
   if (operator && display.innerHTML == firstNumber && secondNumber === null) {
     displayValue = "";
     display.innerHTML = "";
@@ -88,8 +88,8 @@ function handleNumber(numValue) {
   } else if (firstNumber !== null && secondNumber !== null) {
     secondNumber = displayValue;
   }
-    updateDisplay(numValue);
-    console.log("Display value: ", displayValue, "First number: ", firstNumber, "Second number: ", secondNumber, "Operator: ", operator);
+  updateDisplay(numValue);
+  console.log("Display value: ", displayValue, "First number: ", firstNumber, "Second number: ", secondNumber, "Operator: ", operator);
 }
 
 // AC, CE, floats and equals
@@ -119,30 +119,20 @@ function handleOperation(symbol) {
 }
 
 function performCalculationAndUpdate(newSymbol) {
-    if (operator && firstNumber !== null) {
-        if (displayValue !== "") {
-            secondNumber = displayValue;
-        }
-        let result = operate(operator, firstNumber, secondNumber);
-        if (!Number.isInteger(result)) {
-          displayValue = String(result.toFixed(1));
-          updateDisplay(displayValue);
-          firstNumber = result;
-          displayValue = "";
-          return;
-        }
-        displayValue = String(result);
-        updateDisplay(displayValue);
-        firstNumber = result;
-        displayValue = "";
-    } else {
-        if (firstNumber === null) {
-            firstNumber = displayValue;
-        }
+  if (operator && firstNumber !== null) {
+    if (displayValue !== "") {
+      secondNumber = displayValue;
     }
-    operator = newSymbol;
+    let result = operate(operator, firstNumber, secondNumber);
+    displayValue = String(result.toFixed(3));
+    updateDisplay(displayValue);
+    firstNumber = result;
+    displayValue = "";
+  } else if (firstNumber === null) {
+    firstNumber = displayValue;
+  }
+  operator = newSymbol;
 }
-
 
 function updateDisplay(number) {
   if (display.innerHTML === "0") {
