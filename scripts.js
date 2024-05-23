@@ -89,7 +89,11 @@ function handleNumber(numValue) {
 
 // AC, CE, floats and equals
 function handleSpecial(value) {
-
+  switch (value) {
+    case "AC":
+      clearAll();
+      break;
+  }
 }
 
 // +, -, *, /, etc.
@@ -103,4 +107,12 @@ function updateDisplay(number) {
   } else {
     display.innerHTML = displayValue;
   }
+}
+
+function clearAll() {
+  firstNumber = null;
+  operator = null;
+  secondNumber = null;
+  displayValue = "";
+  display.innerHTML = "0";
 }
