@@ -46,6 +46,34 @@ function operate(op, a, b) {
   }
 }
 
+document.addEventListener("DOMContentLoaded", () => {
+  // attach event listener through function call for organization purposes, call the function 3 times with 3 different parameters, representing the 3 differentiated inputs
+  setupButtonListeners(numberButtons);
+  setupButtonListeners(specialButtons);
+  setupButtonListeners(operatorButtons);
+});
+
+function setupButtonListeners(buttons) {
+  buttons.forEach(button => {
+    button.addEventListener("click", () => {
+      handleButtonClick(button);
+    });
+  });
+}
+
+function handleButtonClick(button) {
+  const value = button.dataset.value; // here is one of the cruxes of the code, the statement that contains the button value is stored in a variable that is passed to different function representing the 3 different inputs
+  console.log("Button clicked! Value: ", value);
+
+  if (button.classList.contains("number")) {
+    handleNumber(value); // code for numbers
+  } else if (button.classList.contains("special")) {
+    handleSpecial(value); // code for equals etc.
+  } else if (button.classList.contains("operation")) {
+    handleOperation(value); // code for operators
+  }
+}
+
 updateDisplay() {
 
 }
