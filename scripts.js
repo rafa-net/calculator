@@ -136,33 +136,31 @@ function performCalculationAndUpdate(newSymbol) {
       secondNumber = displayValue;
     }
     let result = operate(operator, firstNumber, secondNumber);
-    if (Number.isInteger(result)) {
-      displayValue = result;
-      updateDisplay(displayValue);
-      firstNumber = result.toString();
-      displayValue = "";
-      operator = newSymbol;
-      return;
-    }
-    let resultString = result.toString();
-    let [integerPart, fractionalPart] = resultString.split(".");
-    if (!fractionalPart) {
-      fractionalPart = "";
-    }
-    let maxDecimalPlaces = 6 - (integerPart.length);
-    if (maxDecimalPlaces < 0) {
-      maxDecimalPlaces = 0;
-    }
-    displayValue = result.toFixed(maxDecimalPlaces);
+    displayValue = formatResult(result);  // new result formatting function
     updateDisplay(displayValue);
     firstNumber = result;
-    displayValue = "";
+    displayValue = ""; 
   } else if (firstNumber === null) {
     firstNumber = displayValue;
   }
   operator = newSymbol;
-  console.log("The operator is: ", operator)
 }
+
+function formatResult(result) {
+  if (Number.isInteger(result)) {
+    return result.toString();  // return integers as strings
+  } else {
+    let resultString = result.toString();
+    let [integerPart, fractionalPart] = resultString.split(".");
+    fractionalPart = fractionalPart || "";  // handle undefined fractional part
+    let maxDecimalPlaces = 6 - (integerPart.length);
+    if (maxDecimalPlaces < 0) {
+      maxDecimalPlaces = 0;
+    }
+    return result.toFixed(maxDecimalPlaces);
+  }
+}
+
 
 function updateDisplay(number) {
   if (number.length > 6) {
