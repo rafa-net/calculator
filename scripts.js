@@ -10,7 +10,7 @@ let operator = null;
 let secondNumber = null;
 let displayValue = "";
 
-// basic arithmetical function declarations for clarity
+// function declarations of all arithmetical operations to be used
 function add(a, b) {
   return a + b;
 }
@@ -25,6 +25,14 @@ function multiply(a, b) {
 
 function divide(a, b) {
   return a / b;
+}
+
+function power(a, b) {
+  return a ** b;
+}
+
+function percentage(a, b) {
+  return a * (b / 100);
 }
 
 function operate(op, a, b) {
