@@ -9,6 +9,7 @@ let secondNumber = null;
 let lastOperator = null;
 let lastSecondNumber = null;
 let awaitingNewInput = null;
+let repeatLastOperation = false;
 let displayValue = "";
 
 function add(a, b) {
@@ -102,10 +103,11 @@ function handleButtonClick(button) {
 }
 
 function handleNumber(numValue) {
-  if (awaitingNewInput) {
+  if (awaitingNewInput || repeatLastOperation) {
     displayValue = numValue; 
     updateDisplay(displayValue);
     awaitingNewInput = false;
+    repeatLastOperation = false;
   } else {
     displayValue += numValue;
     updateDisplay(displayValue);
@@ -146,32 +148,44 @@ function handleSpecial(specialValue) {
 }
 
 function handleOperator(symbol) {
-  if (symbol === null && lastOperator && lastSecondNumber) {
+  if (symbol === null && repeatLastOperation) {
     let result = operate(lastOperator, firstNumber, lastSecondNumber);
     displayValue = formatResult(result);
+    result = displayValue;
     updateDisplay(displayValue);
-    firstNumber = result;
-    return;
+    firstNumber = result; 
+    return;  
   }
+  repeatLastOperation = false;
   if (operator && firstNumber !== null && displayValue !== "") {
     secondNumber = displayValue;
     let result = operate(operator, firstNumber, secondNumber);
     displayValue = formatResult(result);
+    result = displayValue;
     updateDisplay(displayValue);
     firstNumber = result;
-    lastSecondNumber = secondNumber;
-    lastOperator = operator;
+    lastSecondNumber = secondNumber; 
+    lastOperator = operator; 
     displayValue = "";
   } else if (firstNumber === null && displayValue !== "") {
     firstNumber = displayValue;
     displayValue = "";
   }
   operator = symbol;
+  if (symbol === null) {
+    repeatLastOperation = true;
+  }
   awaitingNewInput = true;
 }
 
+
 function formatResult(result) {
   if (Number.isInteger(result)) {
+    if (String(result).length > 7) {
+      let processedInteger = result.toString();
+      processedInteger = processedInteger.substring(0, 7);
+      return processedInteger;
+    }
     return result.toString();
   } else {
     let resultString = result.toString();
@@ -192,6 +206,7 @@ function clearAll() {
   awaitingNewInput = null;
   lastOperator = null;
   lastSecondNumber = null;
+  repeatLastOperation = false;
   displayValue = "";
   display.innerHTML = "0";
 }
@@ -234,5 +249,3 @@ function updateDisplay(value) {
     display.innerHTML = displayValue;
   }
 }
-
-// console.log("Display value:", displayValue, "First number:", firstNumber, "Second number:", secondNumber, "Operator:", operator);

@@ -7,9 +7,9 @@
   padding: 0;
 }
 
-html, 
+html,
 body {
-  height: 100%; /* ensuring full viewport coverage */
+  height: 100%;
   min-height: 100vh;
 }
 
@@ -41,7 +41,7 @@ sup {
   grid-template-columns: repeat(4, 1fr);
   gap: 8px;
   background-color: #9e9e9e;
-  width: 100%; /* occupy all space within container */
+  width: 100%;
   border-radius: 6px;
   padding: 20px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
@@ -50,7 +50,7 @@ sup {
 .display {
   display: flex;
   align-items: center;
-  justify-content: flex-end; /* moves the display content to the far right */
+  justify-content: flex-end;
   font-weight: 300;
   font-size: 4.5em;
   background-color: #e0e0e0;
