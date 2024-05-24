@@ -84,12 +84,10 @@ sup {
 
 .button:hover {
   filter: brightness(1.3);
-  filter: drop-shadow(magenta 10px 10px 20px) invert(100%);
-  transform: scale(1.1);
+  filter: drop-shadow(green 10px 10px 20px) invert(100%);
 }
 
 .button:active,
 .button.keyboard-active {
-  transform: scale(0.8);
   filter: brightness(0.8);
 }

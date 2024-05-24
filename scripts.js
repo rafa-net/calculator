@@ -104,7 +104,7 @@ function handleButtonClick(button) {
 
 function handleNumber(numValue) {
   if (awaitingNewInput || repeatLastOperation) {
-    displayValue = numValue; 
+    displayValue = numValue;
     updateDisplay(displayValue);
     awaitingNewInput = false;
     repeatLastOperation = false;
@@ -117,7 +117,7 @@ function handleNumber(numValue) {
     updateDisplay(displayValue);
   }
   if (!operator) {
-    firstNumber = displayValue;  
+    firstNumber = displayValue;
   } else {
     secondNumber = displayValue;
   }
@@ -132,10 +132,9 @@ function handleSpecial(specialValue) {
       clearOne();
       break;
     case ".":
-      if (display.innerHTML === "0" && !displayValue.includes(".") ||
-          firstNumber !== null && operator) {
+      if (display.innerHTML === "0" && !displayValue.includes(".")) {
         displayValue = "0.";
-      } 
+      }
       if (!displayValue.includes(".")) {
         displayValue += ".";
       }
@@ -153,8 +152,8 @@ function handleOperator(symbol) {
     displayValue = formatResult(result);
     result = displayValue;
     updateDisplay(displayValue);
-    firstNumber = result; 
-    return;  
+    firstNumber = result;
+    return;
   }
   repeatLastOperation = false;
   if (operator && firstNumber !== null && displayValue !== "") {
@@ -164,8 +163,8 @@ function handleOperator(symbol) {
     result = displayValue;
     updateDisplay(displayValue);
     firstNumber = result;
-    lastSecondNumber = secondNumber; 
-    lastOperator = operator; 
+    lastSecondNumber = secondNumber;
+    lastOperator = operator;
     displayValue = "";
   } else if (firstNumber === null && displayValue !== "") {
     firstNumber = displayValue;
@@ -239,7 +238,7 @@ function clearOne() {
 function updateDisplay(value) {
   if (awaitingNewInput) {
     display.innerHTML = "";
-    awaitingNewInput = false; 
+    awaitingNewInput = false;
   }
   displayValue = value.toString();
   if (displayValue.length > 7) {
