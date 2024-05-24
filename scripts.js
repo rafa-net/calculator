@@ -1,7 +1,8 @@
 const numberButtons = document.querySelectorAll(".button.number");
-const specialButtons = document.querySelectorAll('.button.special');
-const operatorButtons = document.querySelectorAll('.button.operator');
-const display = document.getElementById("display");
+const specialButtons = document.querySelectorAll(".button.special");
+const operatorButtons = document.querySelectorAll(".button.operator");
+
+const displayText = document.getElementById("displayText");
 
 let firstNumber = null;
 let operator = null;
@@ -72,6 +73,7 @@ function handleGlobalKeyDown(e) {
   if (buttonPressed) {
     buttonPressed.click();
     buttonPressed.classList.add('keyboard-active');
+    displayText.classList.add(`display-blink`);
   }
 }
 
@@ -79,6 +81,7 @@ function handleGlobalKeyUp(e) {
   const buttonPressed = document.querySelector(`.button[data-key="${e.key}"]`);
   if (buttonPressed) {
     buttonPressed.classList.remove('keyboard-active');
+    displayText.classList.remove(`display-blink`);
   }
 }
 
@@ -86,6 +89,12 @@ function setupButtonListeners(buttons) {
   buttons.forEach(button => {
     button.addEventListener("click", () => {
       handleButtonClick(button);
+    });
+    button.addEventListener("mousedown", () => {
+      displayText.classList.add(`display-blink`);
+    });
+    button.addEventListener("mouseup", () => {
+      displayText.classList.remove(`display-blink`);
     });
   });
 }
@@ -112,7 +121,7 @@ function handleNumber(numValue) {
     displayValue += numValue;
     updateDisplay(displayValue);
   }
-  if (operator && display.innerHTML === firstNumber && secondNumber === null) {
+  if (operator && displayText.innerHTML === firstNumber && secondNumber === null) {
     displayValue = numValue;
     updateDisplay(displayValue);
   }
@@ -132,7 +141,7 @@ function handleSpecial(specialValue) {
       clearOne();
       break;
     case ".":
-      if (display.innerHTML === "0" && !displayValue.includes(".")) {
+      if (displayText.innerHTML === "0" && !displayValue.includes(".")) {
         displayValue = "0.";
       }
       if (!displayValue.includes(".")) {
@@ -207,14 +216,14 @@ function clearAll() {
   lastSecondNumber = null;
   repeatLastOperation = false;
   displayValue = "";
-  display.innerHTML = "0";
+  displayText.innerHTML = "0";
 }
 
 function clearOne() {
-  if (display.innerHTML.length === 1 || display.innerHTML === "0") {
+  if (displayText.innerHTML.length === 1 || displayText.innerHTML === "0") {
 
     displayValue = "";
-    display.innerHTML = "0";
+    displayText.innerHTML = "0";
 
     if (operator) {
       secondNumber = null;
@@ -223,7 +232,7 @@ function clearOne() {
     }
   } else {
 
-    displayValue = display.innerHTML.slice(0, -1);
+    displayValue = displayText.innerHTML.slice(0, -1);
 
 
     if (operator) {
@@ -237,14 +246,14 @@ function clearOne() {
 
 function updateDisplay(value) {
   if (awaitingNewInput) {
-    display.innerHTML = "";
+    displayText.innerHTML = "";
     awaitingNewInput = false;
   }
   displayValue = value.toString();
   if (displayValue.length > 7) {
     displayValue = displayValue.substring(0, 7);
   }
-  if (display.innerHTML !== displayValue) {
-    display.innerHTML = displayValue;
+  if (displayText.innerHTML !== displayValue) {
+    displayText.innerHTML = displayValue;
   }
 }
