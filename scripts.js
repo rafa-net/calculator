@@ -133,8 +133,8 @@ function handleSpecial(specialValue) {
     case ".":
       if (!displayValue.includes(".")) {
         displayValue += ".";
+        updateDisplay(".");
       }
-      updateDisplay();
       break;
     case "=":
       handleOperator(null);
@@ -143,14 +143,22 @@ function handleSpecial(specialValue) {
 }
 
 function handleOperator(symbol) {
-  if (operator && firstNumber !== null) {
-    if (displayValue !== "") {
-      secondNumber = displayValue;
-      let result = operate(operator, firstNumber, secondNumber);
-      displayValue = formatResult(result);
-      updateDisplay(displayValue);
-      firstNumber = result;
-    }
+  if (symbol === null && lastOperator && lastSecondNumber) {
+    console.log("Handling repeated '=' presses");
+    let result = operate(lastOperator, firstNumber, lastSecondNumber);
+    displayValue = formatResult(result);
+    updateDisplay(displayValue);
+    firstNumber = result;
+    return;
+  }
+  if (operator && firstNumber !== null && displayValue !== "") {
+    secondNumber = displayValue;
+    let result = operate(operator, firstNumber, secondNumber);
+    displayValue = formatResult(result);
+    updateDisplay(displayValue);
+    firstNumber = result;
+    lastSecondNumber = secondNumber;
+    lastOperator = operator;
     displayValue = "";
   } else if (firstNumber === null && displayValue !== "") {
     firstNumber = displayValue;
@@ -180,6 +188,8 @@ function clearAll() {
   operator = null;
   secondNumber = null;
   awaitingNewInput = null;
+  lastOperator = null;
+  lastSecondNumber = null;
   displayValue = "";
   display.innerHTML = "0";
 }
