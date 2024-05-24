@@ -131,10 +131,12 @@ function handleSpecial(specialValue) {
       clearOne();
       break;
     case ".":
-      if (!displayValue.includes(".")) {
+      if (display.innerHTML === "0" && !displayValue.includes(".")) {
+        displayValue = "0.";
+      } else if (!displayValue.includes(".")) {
         displayValue += ".";
-        updateDisplay(".");
       }
+      updateDisplay(displayValue);
       break;
     case "=":
       handleOperator(null);
