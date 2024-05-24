@@ -91,7 +91,6 @@ function setupButtonListeners(buttons) {
 
 function handleButtonClick(button) {
   const value = button.dataset.value;
-  console.log("Button clicked! Value: ", value);
 
   if (button.classList.contains("number")) {
     handleNumber(value);
@@ -146,7 +145,6 @@ function handleSpecial(specialValue) {
 
 function handleOperator(symbol) {
   if (symbol === null && lastOperator && lastSecondNumber) {
-    console.log("Handling repeated '=' presses");
     let result = operate(lastOperator, firstNumber, lastSecondNumber);
     displayValue = formatResult(result);
     updateDisplay(displayValue);
@@ -219,8 +217,6 @@ function clearOne() {
     }
     updateDisplay(displayValue);
   }
-
-  console.log("Display value:", displayValue, "First number:", firstNumber, "Second number:", secondNumber, "Operator:", operator);
 }
 
 function updateDisplay(value) {
@@ -236,3 +232,5 @@ function updateDisplay(value) {
     display.innerHTML = displayValue;
   }
 }
+
+// console.log("Display value:", displayValue, "First number:", firstNumber, "Second number:", secondNumber, "Operator:", operator);
