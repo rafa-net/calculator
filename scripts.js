@@ -130,9 +130,11 @@ function handleSpecial(specialValue) {
       clearOne();
       break;
     case ".":
-      if (display.innerHTML === "0" && !displayValue.includes(".")) {
+      if (display.innerHTML === "0" && !displayValue.includes(".") ||
+          firstNumber !== null && operator) {
         displayValue = "0.";
-      } else if (!displayValue.includes(".")) {
+      } 
+      if (!displayValue.includes(".")) {
         displayValue += ".";
       }
       updateDisplay(displayValue);
