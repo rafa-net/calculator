@@ -34,7 +34,26 @@ function power(a, b) {
 }
 
 function percentage(a, b) {
-  return a * (b / 100);
+  return (100 * a) / b;
+}
+
+function applyPercentage(operator, baseValue, percentageValue) {
+  let result;
+  let percentageDecimal = percentageValue / 100;
+  switch (operator) {
+    case '+':
+    case '-':
+      result = baseValue * percentageDecimal;
+      return operator === '-' ? baseValue - result : baseValue + result;
+    case '*':
+      result = baseValue * percentageDecimal;
+      return result;
+    case '/':
+      result = baseValue / percentageDecimal;
+      return result;
+    default:
+      return;
+  }
 }
 
 function operate(op, a, b) {
@@ -53,10 +72,6 @@ function operate(op, a, b) {
       return 0;
     }
     return divide(a, b);
-  } else if (op === "**") {
-    return power(a, b);
-  } else if (op === "%") {
-    return percentage(a, b);
   }
 }
 
@@ -112,6 +127,11 @@ function handleButtonClick(button) {
 }
 
 function handleNumber(numValue) {
+  if (operator === "%") {
+    displayValue += numValue
+    updateDisplay(displayValue);
+    return;
+  }
   if (awaitingNewInput || repeatLastOperation) {
     displayValue = numValue;
     updateDisplay(displayValue);
@@ -137,7 +157,7 @@ function handleSpecial(specialValue) {
     case "AC":
       clearAll();
       break;
-    case "CE":
+    case "backspace":
       clearOne();
       break;
     case ".":
@@ -158,7 +178,26 @@ function handleSpecial(specialValue) {
   }
 }
 
+
 function handleOperator(symbol) {
+  if (symbol === "sqrt" && firstNumber !== null) {
+    let result = Math.sqrt(firstNumber);
+    displayValue = result.toString();
+    updateDisplay(displayValue);
+    firstNumber = result;
+    displayValue = "";
+    awaitingNewInput = true;
+    operator = null;
+  }
+  if (symbol === '%' && operator !== "%" && firstNumber !== null && displayValue !== "") {
+    let result = applyPercentage(operator, parseFloat(firstNumber), parseFloat(displayValue));
+    displayValue = result.toString();
+    updateDisplay(displayValue);
+    firstNumber = result;
+    displayValue = "";
+    awaitingNewInput = true;
+    operator = null;
+  } 
   if (symbol === null && repeatLastOperation) {
     let result = operate(lastOperator, firstNumber, lastSecondNumber);
     displayValue = formatResult(result);
@@ -189,12 +228,11 @@ function handleOperator(symbol) {
   awaitingNewInput = true;
 }
 
-
 function formatResult(result) {
   if (Number.isInteger(result)) {
-    if (String(result).length > 9) {
+    if (String(result).length > 14) {
       let processedInteger = result.toString();
-      processedInteger = processedInteger.substring(0, 9);
+      processedInteger = processedInteger.substring(0, 14);
       return processedInteger;
     }
     return result.toString();
@@ -202,7 +240,7 @@ function formatResult(result) {
     let resultString = result.toString();
     let [integerPart, fractionalPart] = resultString.split(".");
     fractionalPart = fractionalPart || "";
-    let maxDecimalPlaces = 8 - (integerPart.length);
+    let maxDecimalPlaces = 13 - (integerPart.length);
     if (maxDecimalPlaces < 0) {
       maxDecimalPlaces = 0;
     }
@@ -224,20 +262,15 @@ function clearAll() {
 
 function clearOne() {
   if (displayText.innerHTML.length === 1 || displayText.innerHTML === "0") {
-
     displayValue = "";
     displayText.innerHTML = "0";
-
     if (operator) {
       secondNumber = null;
     } else {
       firstNumber = null;
     }
   } else {
-
     displayValue = displayText.innerHTML.slice(0, -1);
-
-
     if (operator) {
       secondNumber = displayValue;
     } else {
@@ -253,8 +286,8 @@ function updateDisplay(value) {
     awaitingNewInput = false;
   }
   displayValue = value.toString();
-  if (displayValue.length > 9) {
-    displayValue = displayValue.substring(0, 9);
+  if (displayValue.length > 14) {
+    displayValue = displayValue.substring(0, 14);
   }
   if (displayText.innerHTML !== displayValue) {
     displayText.innerHTML = displayValue;
