@@ -346,14 +346,12 @@ function clearAll() {
 }
 
 function clearEntry() {
-  displayText.innerHTML = "0";  // Reset the display to zero
-  displayValue = "";  // Clear the display value
-
-  // Reset the appropriate variable based on whether an operator has been used
+  displayText.innerHTML = "0";
+  displayValue = ""; 
   if (operator) {
-    secondNumber = null;  // Clear the second number if an operator is present
+    secondNumber = null;
   } else {
-    firstNumber = null;  // Clear the first number if no operator is present
+    firstNumber = null;
   }
 }
 
