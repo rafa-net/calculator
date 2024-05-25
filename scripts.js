@@ -1,32 +1,4 @@
 
-function toggleColorScheme() {
-  const bodyElement = document.body;
-  if (bodyElement.classList.contains('dark-mode') && display.classList.contains('dark-mode')) {
-    bodyElement.classList.remove('dark-mode');
-    bodyElement.classList.add('light-mode');
-    display.classList.remove('dark-mode');
-    display.classList.add('light-mode');
-  } else {
-    bodyElement.classList.remove('light-mode');
-    bodyElement.classList.add('dark-mode');
-    display.classList.remove('light-mode');
-    display.classList.add('dark-mode');
-  }
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-  const toggleButton = document.getElementById('color-scheme-toggle');
-  toggleButton.addEventListener('click', toggleColorScheme);
-});
-
-document.addEventListener('DOMContentLoaded', function () {
-  const toggleButton = document.getElementById('color-scheme-toggle');
-  toggleButton.addEventListener('click', function () {
-    this.classList.toggle('dark-mode');
-  });
-});
-
-
 const numberButtons = document.querySelectorAll(".button.number");
 const specialButtons = document.querySelectorAll(".button.special");
 const operatorButtons = document.querySelectorAll(".button.operator");
@@ -44,6 +16,8 @@ let repeatLastOperation = false;
 let memoryNumber = "";
 let displayValue = "";
 let memoryRecallPressed = 0;
+let memoryPlusPressed = 0;
+let memoryMinusPressed = 0;
 let grandTotal = 0;
 
 
@@ -70,6 +44,25 @@ function power(a, b) {
 function percentage(a, b) {
   return (100 * a) / b;
 }
+
+document.addEventListener('DOMContentLoaded', function () {
+  const toggleButton = document.getElementById('color-scheme-toggle');
+  toggleButton.addEventListener('click', function () {
+    this.classList.toggle('dark-mode');
+    const bodyElement = document.body;
+    if (bodyElement.classList.contains('dark-mode') && display.classList.contains('dark-mode')) {
+      bodyElement.classList.remove('dark-mode');
+      bodyElement.classList.add('light-mode');
+      display.classList.remove('dark-mode');
+      display.classList.add('light-mode');
+    } else {
+      bodyElement.classList.remove('light-mode');
+      bodyElement.classList.add('dark-mode');
+      display.classList.remove('light-mode');
+      display.classList.add('dark-mode');
+    }
+  });
+});
 
 function applyPercentage(operator, baseValue, percentageValue) {
   let result;
@@ -151,6 +144,7 @@ function setupButtonListeners(buttons) {
 }
 
 function handleButtonClick(button) {
+  console.log("Button clicked:", button.dataset.value);
   const value = button.dataset.value;
 
   if (button.classList.contains("number")) {
@@ -226,6 +220,8 @@ function handleSpecial(specialValue) {
 function handleOperator(symbol) {
   if (symbol === "sqrt") {
     handleSqrtOperation();
+  } else if (symbol === '%' && !operator) {
+    return;
   } else if (symbol === '%' && operator !== "%" && firstNumber !== null && displayValue !== "") {
     handlePercentageOperation();
   } else if (symbol === null && repeatLastOperation) {
@@ -244,28 +240,37 @@ function handleOperator(symbol) {
 function handleMemory(memory) {
   if (memoryRecallPressed > 1) {
     memoryNumber = 0;
+    memoryPlusPressed = 0;
+    memoryMinusPressed = 0;
   }
-  
-
-
   if (memory === "MR") {
     displayValue = memoryNumber;
     updateDisplay(displayValue);
-    displayValue = "";
     memoryRecallPressed++;
     return;
   }
+
   if (memory === "M-" && memoryNumber === 0) {
     return;
   }
-  if (memory === "M+") {
-    memoryNumber += displayValue;
-    updateDisplay(displayValue);
-  } else if (memory === "M-") {
-    memoryNumber -= displayValue;
-    updateDisplay(displayValue);
+  else if (memory === "M-") {
+    memoryNumber = (Number(memoryNumber) - Number(displayValue));
+    displayValue = memoryNumber.toString();
+    return;
   }
+
+  if (memory === "M+" && memoryPlusPressed === 0) {
+    memoryNumber = displayValue;
+    memoryPlusPressed++;
+    displayValue = "";
+  } else if (memory === "M+" && memoryPlusPressed !== 0) {
+    memoryNumber = (Number(displayValue) + Number(memoryNumber));
+    displayValue = memoryNumber.toString();
+    memoryPlusPressed++;
+  }
+  
 }
+
 
 function handleSqrtOperation() {
   let result = Math.sqrt(firstNumber);
@@ -341,13 +346,16 @@ function clearAll() {
   lastOperator = null;
   lastSecondNumber = null;
   repeatLastOperation = false;
+  memoryNumber = 0;
+  memoryRecallPressed = 0;
+  memoryPlusPressed = 0;
   displayValue = "";
   displayText.innerHTML = "0";
 }
 
 function clearEntry() {
   displayText.innerHTML = "0";
-  displayValue = ""; 
+  displayValue = "";
   if (operator) {
     secondNumber = null;
   } else {
