@@ -11,6 +11,7 @@ let lastOperator = null;
 let lastSecondNumber = null;
 let awaitingNewInput = null;
 let repeatLastOperation = false;
+let memory = 0;
 let displayValue = "";
 
 function add(a, b) {
