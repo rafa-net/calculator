@@ -1,7 +1,6 @@
 const numberButtons = document.querySelectorAll(".button.number");
 const specialButtons = document.querySelectorAll(".button.special");
 const operatorButtons = document.querySelectorAll(".button.operator");
-
 const displayText = document.getElementById("displayText");
 
 let firstNumber = null;
@@ -179,35 +178,35 @@ function handleSpecial(specialValue) {
   }
 }
 
+function handleSqrtOperation() {
+  let result = Math.sqrt(firstNumber);
+  displayValue = result.toString();
+  updateDisplay(displayValue);
+  firstNumber = result;
+  displayValue = "";
+  awaitingNewInput = true;
+  operator = null;
+}
 
-function handleOperator(symbol) {
-  if (symbol === "sqrt" && firstNumber !== null) {
-    let result = Math.sqrt(firstNumber);
-    displayValue = result.toString();
-    updateDisplay(displayValue);
-    firstNumber = result;
-    displayValue = "";
-    awaitingNewInput = true;
-    operator = null;
-  }
-  if (symbol === '%' && operator !== "%" && firstNumber !== null && displayValue !== "") {
-    let result = applyPercentage(operator, parseFloat(firstNumber), parseFloat(displayValue));
-    displayValue = result.toString();
-    updateDisplay(displayValue);
-    firstNumber = result;
-    displayValue = "";
-    awaitingNewInput = true;
-    operator = null;
-  } 
-  if (symbol === null && repeatLastOperation) {
-    let result = operate(lastOperator, firstNumber, lastSecondNumber);
-    displayValue = formatResult(result);
-    result = displayValue;
-    updateDisplay(displayValue);
-    firstNumber = result;
-    return;
-  }
-  repeatLastOperation = false;
+function handlePercentageOperation() {
+  let result = applyPercentage(operator, parseFloat(firstNumber), parseFloat(displayValue));
+  displayValue = result.toString();
+  updateDisplay(displayValue);
+  firstNumber = result;
+  displayValue = "";
+  awaitingNewInput = true;
+  operator = null;
+}
+
+function handleRepeatLastOperation() {
+  let result = operate(lastOperator, firstNumber, lastSecondNumber);
+  displayValue = formatResult(result);
+  result = displayValue;
+  updateDisplay(displayValue);
+  firstNumber = result;
+}
+
+function handleStandardOperation(symbol) {
   if (operator && firstNumber !== null && displayValue !== "") {
     secondNumber = displayValue;
     let result = operate(operator, firstNumber, secondNumber);
@@ -223,6 +222,19 @@ function handleOperator(symbol) {
     displayValue = "";
   }
   operator = symbol;
+}
+
+function handleOperator(symbol) {
+  if (symbol === "sqrt") {
+    handleSqrtOperation();
+  } else if (symbol === '%' && operator !== "%" && firstNumber !== null && displayValue !== "") {
+    handlePercentageOperation();
+  } else if (symbol === null && repeatLastOperation) {
+    handleRepeatLastOperation();
+  } else {
+    handleStandardOperation(symbol);
+  }
+
   if (symbol === null) {
     repeatLastOperation = true;
   }

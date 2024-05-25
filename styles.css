@@ -22,10 +22,6 @@ body {
   background-color: beige;
 }
 
-sup {
-  font-size: 0.5em;
-}
-
 .container {
   display: flex;
   flex-direction: column;
@@ -70,7 +66,6 @@ sup {
   font-size: 3em;
   color: black;
 }
-
 
 .button {
   font-size: 1.5em;
@@ -128,7 +123,6 @@ p#calcLogo {
   background-color: #ff5722;
 }
 
-
 .button:hover {
   filter: brightness(1.3);
   filter: drop-shadow(green 10px 10px 20px) invert(100%);
@@ -143,11 +137,11 @@ p#calcLogo {
   0% {
     opacity: 1;
   }
-  
+
   50% {
     opacity: 0.2;
   }
-  
+
   100% {
     opacity: 1;
   }
