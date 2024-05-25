@@ -202,7 +202,7 @@ function formatResult(result) {
     let resultString = result.toString();
     let [integerPart, fractionalPart] = resultString.split(".");
     fractionalPart = fractionalPart || "";
-    let maxDecimalPlaces = 6 - (integerPart.length);
+    let maxDecimalPlaces = 8 - (integerPart.length);
     if (maxDecimalPlaces < 0) {
       maxDecimalPlaces = 0;
     }
