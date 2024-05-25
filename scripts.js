@@ -127,6 +127,9 @@ function handleButtonClick(button) {
 }
 
 function handleNumber(numValue) {
+  if ((numValue === "0" || numValue === "00") && displayText.innerHTML === "0") {
+    return;
+  }
   if (operator === "%") {
     displayValue += numValue
     updateDisplay(displayValue);

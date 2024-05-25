@@ -98,7 +98,7 @@ button#allClear {
   align-items: center;
   justify-content: center;
   background-color: rgb(58, 49, 122);
-  border-radius: initial;
+  border-radius: 5px;
   height: 80%;
   box-shadow: 0 4px rgba(0, 0, 0, 0.2);
   cursor: pointer;
