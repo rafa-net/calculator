@@ -202,8 +202,8 @@ function handleSpecial(specialValue) {
       if (displayText.innerHTML === "0" && !displayValue.includes(".")) {
         displayValue = "0.";
       }
-      if (!displayValue.includes(".") && awaitingNewInput) {
-        displayValue += "0.";
+      if (!displayValue.includes(".") && awaitingNewInput && firstNumber !== 0) {
+        displayValue = "0.";
       }
       if (!displayValue.includes(".")) {
         displayValue += ".";
