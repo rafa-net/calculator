@@ -144,6 +144,9 @@ function handleSpecial(specialValue) {
       if (displayText.innerHTML === "0" && !displayValue.includes(".")) {
         displayValue = "0.";
       }
+      if (!displayValue.includes(".") && awaitingNewInput) {
+        displayValue += "0.";
+      }
       if (!displayValue.includes(".")) {
         displayValue += ".";
       }
@@ -189,9 +192,9 @@ function handleOperator(symbol) {
 
 function formatResult(result) {
   if (Number.isInteger(result)) {
-    if (String(result).length > 7) {
+    if (String(result).length > 9) {
       let processedInteger = result.toString();
-      processedInteger = processedInteger.substring(0, 7);
+      processedInteger = processedInteger.substring(0, 9);
       return processedInteger;
     }
     return result.toString();
@@ -250,8 +253,8 @@ function updateDisplay(value) {
     awaitingNewInput = false;
   }
   displayValue = value.toString();
-  if (displayValue.length > 7) {
-    displayValue = displayValue.substring(0, 7);
+  if (displayValue.length > 9) {
+    displayValue = displayValue.substring(0, 9);
   }
   if (displayText.innerHTML !== displayValue) {
     displayText.innerHTML = displayValue;
