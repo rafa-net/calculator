@@ -12,12 +12,18 @@
   <div class="container">
     <div id="display" class="display"><span id="displayText">0</span></div>
     <div id="calculator" class="calculator">
+      <p id="calcLogo">
+        <span class="calc-title">TOP-19<br></span>
+        <span class="calc-subtitle">12 DIGITS</span>
+      </p>
+      <button id="allClear" class="button special memory" tabindex="0" data-key="A" data-value="AC">AC</button>
+
       <button class="button special memory" tabindex="0" data-key="" data-value="M+">M+</button>
       <button class="button special memory" tabindex="0" data-key="" data-value="M-">M-</button>
-      <button class="button special memory" tabindex="0" data-key="" data-value="MRC">MRC</button>
+      <button class="button special memory" tabindex="0" data-key="" data-value="MR">MR</button>
       <button class="button special memory" tabindex="0" data-key="" data-value="GT">GT</button>
+      <button class="button special memory" tabindex="0" data-key="" data-value="C">CE</button>
 
-      <button class="button special" tabindex="0" data-key="A" data-value="AC">AC</button>
       <button class="button special" tabindex="0" data-key="Backspace" data-value="CE">CE</button>
       <button class="button operator" tabindex="0" data-key="%" data-value="%">%</button>
       <button class="button operator" tabindex="0" data-key="^" data-value="**">x<sup>y</sup></button>
@@ -36,6 +42,7 @@
       <button class="button number" tabindex="0" data-key="0" data-value="0">0</button>
       <button class="button special" tabindex="0" data-key="." data-value=".">.</button>
       <button class="button special" tabindex="0" data-key="=" data-value="=">=</button>
+      <button class="button operator" tabindex="0" data-key="+" data-value="+">+</button>
       <button class="button operator" tabindex="0" data-key="+" data-value="+">+</button>
     </div>
   </div>
