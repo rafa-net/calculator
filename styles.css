@@ -1,5 +1,80 @@
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&family=M+PLUS+1+Code:wght@100..700&family=M+PLUS+1:wght@100..900&family=M+PLUS+1p&family=M+PLUS+2:wght@100..900&family=M+PLUS+Code+Latin:wght@100..700&family=M+PLUS+Rounded+1c&display=swap');
 
+:root {
+  --background-color: beige;
+  --text-color: #222222;
+  --display-color: #f1f1f1;
+  --display-txt-color: #222222;
+  --calculator-color: #a3a3a3;
+  --button-bg-color: #616161;
+  --button-txt-color: #f1f1f1;
+  --memory-bg-color: rgb(122, 49, 49);
+  --memory-txt-color: #f1f1f1;
+  --op-bg-color: #ff5722;
+  --op-txt-color: #f1f1f1;
+  --equals-bg-color: #009688;
+  --equals-txt-color: #f1f1f1;
+  --ac-bg-color: rgb(58, 49, 122);
+  --ac-txt-color: whitesmoke;
+  --bksp-bg-color: #ff5722;
+  --bksp-txt-color: #f1f1f1;
+  --box-shadow-darkest: rgba(0, 0, 0, 0.5);
+  --box-shadow-darker: rgba(0, 0, 0, 0.4);
+  --box-shadow-dark: rgba(0, 0, 0, 0.2);
+  --drop-shadow-btn: green;
+}
+
+/* Light mode styles */
+.light-mode {
+  --background-color: beige;
+  --text-color: #222222;
+  --display-color: #f1f1f1;
+  --display-txt-color: #222222;
+  --calculator-color: #a3a3a3;
+  --button-bg-color: #616161;
+  --button-txt-color: #f1f1f1;
+  --memory-bg-color: rgb(122, 49, 49);
+  --memory-txt-color: #f1f1f1;
+  --op-bg-color: #ff5722;
+  --op-txt-color: #f1f1f1;
+  --equals-bg-color: #009688;
+  --equals-txt-color: #f1f1f1;
+  --ac-bg-color: rgb(58, 49, 122);
+  --ac-txt-color: whitesmoke;
+  --bksp-bg-color: #ff5722;
+  --bksp-txt-color: #f1f1f1;
+  --box-shadow: rgb(69, 69, 69);
+  --box-shadow-darkest: rgba(0, 0, 0, 0.5);
+  --box-shadow-darker: rgba(0, 0, 0, 0.4);
+  --box-shadow-dark: rgba(0, 0, 0, 0.2);
+  --drop-shadow-btn: green;
+}
+
+/* Dark mode styles */
+.dark-mode {
+  --background-color: #0a0a23;
+  --text-color: #ced4e2;
+  --display-color: rgba(0, 0, 0, 0.8);
+  --display-txt-color: white;
+  --calculator-color: #e0e0e0;
+  --button-bg-color: #320f20;
+  --button-txt-color: white;
+  --memory-bg-color: #3a3506;
+  --memory-txt-color: white;
+  --op-bg-color: #ffff00;
+  --op-txt-color: rgb(0, 0, 0);
+  --equals-bg-color: #ceacd4;
+  --equals-txt-color: rgb(0, 0, 0);
+  --ac-bg-color: rgb(1, 246, 181);
+  --ac-txt-color: rgb(0, 0, 0);
+  --bksp-bg-color: #ffff00;
+  --bksp-txt-color: rgb(0, 0, 0);
+  --box-shadow: rgb(64, 64, 64);
+  --border-color: gainsboro;
+  --drop-shadow-btn: magenta;
+}
+
+
 * {
   font-family: "IBM Plex Mono", monospace;
   font-size: 1.125em;
@@ -19,18 +94,21 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: beige;
+  background-color: var(--background-color);
+  color: var(--text-color);
 }
+
+
 
 .container {
   display: flex;
   flex-direction: column;
   align-items: center;
   background: linear-gradient(145deg, #757575, #424242);
-  border: 4px outset grey;
+  border: 4px outset var(--border-color);
   border-radius: 10px;
   padding: 16px 18px;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 8px 16px var(--box-shadow-darkest);
 }
 
 .calculator {
@@ -39,57 +117,85 @@ body {
   grid-template-rows: auto;
   justify-items: center;
   gap: 8px;
-  background-color: #9e9e9e;
+  background-color: var(--calculator-color);
   width: 100%;
   height: 90%;
   border-radius: 6px;
   padding: 20px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 4px 15px var(--box-shadow-darker);
 }
 
 .display {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  background-color: #f1f1f1;
+  background-color: var(--display-color);
   width: 100%;
   height: 3em;
   border-radius: 5px;
   padding: 46px 13px 46px 10px;
   margin-bottom: 20px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 10px var(--box-shadow-dark);
 }
 
 #displayText {
   font-family: "M PLUS Code Latin", sans-serif;
   font-weight: 400;
   font-size: 3em;
-  color: black;
+  color: var(--display-txt-color);
 }
 
 .button {
   font-size: 1.5em;
-  background-color: #616161;
-  color: #f1f1f1;
+  font-weight: 900;
+  background-color: var(--button-bg-color);
+  color: var(--button-txt-color);
   width: 100%;
   border-radius: 5px;
   padding: 15px 0;
-  box-shadow: 0 4px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px var(--box-shadow-dark);
   cursor: pointer;
   transition: all 200ms;
 }
 
 .button.special {
-  background-color: #009688;
+  background-color: var(--equals-bg-color);
+  color: var(--equals-txt-color);
 }
 
 .button.special.memory {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: rgb(122, 49, 49);
+  background-color: var(--memory-bg-color);
+  color: var(--memory-txt-color);
   border-radius: 20%;
   height: 75%;
+}
+
+.button.backspace {
+  background-color: var(--bksp-bg-color);
+  color: var(--bksp-txt-color);
+}
+
+.button.point {
+  background-color: var(--button-bg-color);
+  color: var(--button-txt-color);
+}
+
+.button.operator {
+  background-color: var(--op-bg-color);
+  color: var(--op-txt-color);
+}
+
+.button:hover {
+  filter: brightness(1.3);
+  filter: drop-shadow(var(--drop-shadow-btn) 10px 10px 20px) invert(100%);
+}
+
+.button:active,
+.button.keyboard-active {
+  filter: brightness(0.8);
 }
 
 button#allClear {
@@ -97,20 +203,27 @@ button#allClear {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: rgb(58, 49, 122);
+  background-color: var(--ac-bg-color);
+  color: var(--ac-txt-color);
   border-radius: 5px;
   height: 80%;
-  box-shadow: 0 4px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px var(--box-shadow);
   cursor: pointer;
 }
 
-p#calcLogo {
+
+
+#calcLogo {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
   grid-column: 2 / 5;
+  align-self: center;
+  justify-self: center;
+  padding-bottom: 16px;
   font-size: 1em;
+  color: rgba(0, 0, 0, 0.8);
 }
 
 .calc-title {
@@ -119,19 +232,6 @@ p#calcLogo {
   font-size: 1.5em;
 }
 
-.button.operator {
-  background-color: #ff5722;
-}
-
-.button:hover {
-  filter: brightness(1.3);
-  filter: drop-shadow(green 10px 10px 20px) invert(100%);
-}
-
-.button:active,
-.button.keyboard-active {
-  filter: brightness(0.8);
-}
 
 @keyframes blink {
   0% {
@@ -151,10 +251,61 @@ p#calcLogo {
   animation: 100ms blink;
 }
 
-.button.backspace {
-  background-color: #ff5722;
+#upper-calc-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.button.point {
-  background-color: #616161;
+#color-scheme-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  box-sizing: border-box;
+  cursor: pointer;
+  height: 40px;
+  width: 100px;
+  position: relative;
+  outline: none;
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+#color-scheme-toggle span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  transition: 0.3s;
+}
+
+#color-scheme-toggle span:nth-child(1) {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 20px;
+  background-color: rgb(255, 232, 103);
+  box-shadow: inset 1px 1px 3px 0 rgb(0 0 0 / 40%);
+}
+
+#color-scheme-toggle span:nth-child(2) {
+  top: 5px;
+  left: 5px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background-color: rgb(0, 0, 105);
+  box-shadow: 1px 1px 2px 0 rgb(0 0 0 / 40%);
+}
+
+#color-scheme-toggle.dark-mode span:nth-child(1) {
+  background-color: #10003b;
+}
+
+#color-scheme-toggle.dark-mode span:nth-child(2) {
+  left: 65px;
+  background-color: cyan
 }

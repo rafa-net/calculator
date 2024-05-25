@@ -1,8 +1,38 @@
+
+function toggleColorScheme() {
+  const bodyElement = document.body;
+  if (bodyElement.classList.contains('dark-mode') && display.classList.contains('dark-mode')) {
+    bodyElement.classList.remove('dark-mode');
+    bodyElement.classList.add('light-mode');
+    display.classList.remove('dark-mode');
+    display.classList.add('light-mode');
+  } else {
+    bodyElement.classList.remove('light-mode');
+    bodyElement.classList.add('dark-mode');
+    display.classList.remove('light-mode');
+    display.classList.add('dark-mode');
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const toggleButton = document.getElementById('color-scheme-toggle');
+  toggleButton.addEventListener('click', toggleColorScheme);
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+  const toggleButton = document.getElementById('color-scheme-toggle');
+  toggleButton.addEventListener('click', function () {
+    this.classList.toggle('dark-mode');
+  });
+});
+
+
 const numberButtons = document.querySelectorAll(".button.number");
 const specialButtons = document.querySelectorAll(".button.special");
 const operatorButtons = document.querySelectorAll(".button.operator");
 const memoryButtons = document.querySelectorAll(".button.memory");
 const displayText = document.getElementById("displayText");
+const display = document.getElementById("display");
 
 let firstNumber = null;
 let operator = null;
@@ -13,6 +43,9 @@ let awaitingNewInput = null;
 let repeatLastOperation = false;
 let memoryNumber = "";
 let displayValue = "";
+let memoryRecallPressed = 0;
+let grandTotal = 0;
+
 
 function add(a, b) {
   return a + b;
@@ -158,6 +191,7 @@ function handleNumber(numValue) {
   } else {
     secondNumber = displayValue;
   }
+  memoryRecallPressed = 0;
 }
 
 function handleSpecial(specialValue) {
@@ -165,7 +199,9 @@ function handleSpecial(specialValue) {
     case "AC":
       clearAll();
       break;
-    case "backspace":
+    case "CE":
+      clearEntry();
+    case "bksp":
       clearOne();
       break;
     case ".":
@@ -184,6 +220,7 @@ function handleSpecial(specialValue) {
       handleOperator(null);
       break;
   }
+  memoryRecallPressed = 0;
 }
 
 function handleOperator(symbol) {
@@ -201,13 +238,32 @@ function handleOperator(symbol) {
     repeatLastOperation = true;
   }
   awaitingNewInput = true;
+  memoryRecallPressed = 0;
 }
 
 function handleMemory(memory) {
+  if (memoryRecallPressed > 1) {
+    memoryNumber = 0;
+  }
+  
+
+
+  if (memory === "MR") {
+    displayValue = memoryNumber;
+    updateDisplay(displayValue);
+    displayValue = "";
+    memoryRecallPressed++;
+    return;
+  }
+  if (memory === "M-" && memoryNumber === 0) {
+    return;
+  }
   if (memory === "M+") {
     memoryNumber += displayValue;
+    updateDisplay(displayValue);
   } else if (memory === "M-") {
-    memoryNumber -+ displayValue;
+    memoryNumber -= displayValue;
+    updateDisplay(displayValue);
   }
 }
 
@@ -288,6 +344,19 @@ function clearAll() {
   displayValue = "";
   displayText.innerHTML = "0";
 }
+
+function clearEntry() {
+  displayText.innerHTML = "0";  // Reset the display to zero
+  displayValue = "";  // Clear the display value
+
+  // Reset the appropriate variable based on whether an operator has been used
+  if (operator) {
+    secondNumber = null;  // Clear the second number if an operator is present
+  } else {
+    firstNumber = null;  // Clear the first number if no operator is present
+  }
+}
+
 
 function clearOne() {
   if (displayText.innerHTML.length === 1 || displayText.innerHTML === "0") {
