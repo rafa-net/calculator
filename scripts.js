@@ -88,16 +88,19 @@ function operate(op, a, b) {
   b = parseFloat(b);
 
   if (op === "+") {
+    grandTotal += add(a, b);
     return add(a, b);
   } else if (op === "-") {
     return subtract(a, b);
   } else if (op === "*") {
+    grandTotal += multiply(a, b);
     return multiply(a, b);
   } else if (op === "/") {
     if (b === 0) {
       alert(`Oops! Dividing ${a} by ${b} is like trying to split zero cookies among friends—it just doesn't work. Try a different divisor.`);
       return 0;
     }
+    grandTotal += divide(a, b);
     return divide(a, b);
   }
 }
@@ -238,18 +241,36 @@ function handleOperator(symbol) {
 }
 
 function handleMemory(memory) {
+  if (memory === "GT") {
+    displayValue = grandTotal;
+    firstNumber = displayValue;
+    updateDisplay(displayValue);
+    displayValue = "";
+  }
   if (memoryRecallPressed > 1) {
     memoryNumber = 0;
     memoryPlusPressed = 0;
     memoryMinusPressed = 0;
   }
-  if (memory === "MR") {
+  if (memory === "MR" && memoryNumber === 0) {
+    firstNumber = null;
+    operator = null;
+    secondNumber = null;
+    lastOperator = null;
+    lastSecondNumber = null;
+    awaitingNewInput = null;
+    repeatLastOperation = false;
+    memoryRecallPressed = 0;
+    memoryPlusPressed = 0;
+    memoryMinusPressed = 0;
+    displayValue = "0";
+    updateDisplay(displayValue);
+  } else if (memory === "MR" && memoryNumber !== 0) {
     displayValue = memoryNumber;
     updateDisplay(displayValue);
     memoryRecallPressed++;
     return;
   }
-
   if (memory === "M-" && memoryNumber === 0) {
     return;
   }
@@ -284,6 +305,7 @@ function handleSqrtOperation() {
 
 function handlePercentageOperation() {
   let result = applyPercentage(operator, parseFloat(firstNumber), parseFloat(displayValue));
+  grandTotal += result;
   displayValue = result.toString();
   updateDisplay(displayValue);
   firstNumber = result;
