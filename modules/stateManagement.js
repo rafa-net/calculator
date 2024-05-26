@@ -1,4 +1,3 @@
-// Grouping related state variables
 const calcState = {
   firstNumber: null,
   operator: null,
