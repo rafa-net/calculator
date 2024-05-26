@@ -1,4 +1,3 @@
-
 const numberButtons = document.querySelectorAll(".button.number");
 const specialButtons = document.querySelectorAll(".button.special");
 const operatorButtons = document.querySelectorAll(".button.operator");
@@ -45,24 +44,6 @@ function percentage(a, b) {
   return (100 * a) / b;
 }
 
-document.addEventListener('DOMContentLoaded', function () {
-  const toggleButton = document.getElementById('color-scheme-toggle');
-  toggleButton.addEventListener('click', function () {
-    this.classList.toggle('dark-mode');
-    const bodyElement = document.body;
-    if (bodyElement.classList.contains('dark-mode') && display.classList.contains('dark-mode')) {
-      bodyElement.classList.remove('dark-mode');
-      bodyElement.classList.add('light-mode');
-      display.classList.remove('dark-mode');
-      display.classList.add('light-mode');
-    } else {
-      bodyElement.classList.remove('light-mode');
-      bodyElement.classList.add('dark-mode');
-      display.classList.remove('light-mode');
-      display.classList.add('dark-mode');
-    }
-  });
-});
 
 function applyPercentage(operator, baseValue, percentageValue) {
   let result;
@@ -292,7 +273,6 @@ function handleMemory(memory) {
   
 }
 
-
 function handleSqrtOperation() {
   let result = Math.sqrt(firstNumber);
   displayValue = result.toString();
@@ -385,7 +365,6 @@ function clearEntry() {
   }
 }
 
-
 function clearOne() {
   if (displayText.innerHTML.length === 1 || displayText.innerHTML === "0") {
     displayValue = "";
@@ -420,13 +399,4 @@ function updateDisplay(value) {
   }
 }
 
-document.addEventListener('DOMContentLoaded', function () {
-  const slider = document.getElementById('scale-slider');
-  const element = document.getElementById('container');
-
-  slider.addEventListener('input', function () {
-    const scaleValue = this.value;
-    element.style.transform = `scale(${scaleValue})`;
-  });
-});
 
