@@ -1,26 +1,11 @@
-import { formatResult } from "./resultFormatting.js";
-import { operate } from "../main.js";
-import { calcState } from "./stateManagement.js";
-import { updateDisplay } from "./displayBuffer.js";
-
-function add(a, b) {
-  return a + b;
-}
-
-function subtract(a, b) {
-  return a - b;
-}
-
-function multiply(a, b) {
-  return a * b;
-}
-
-function divide(a, b) {
-  return a / b;
-}
-
-function percentage(a, b) {
-  return (100 * a) / b;
+function handleSqrtOperation() {
+  let result = Math.sqrt(calcState.firstNumber);
+  calcState.displayValue = result.toString();
+  updateDisplay(calcState.displayValue);
+  calcState.firstNumber = result;
+  calcState.displayValue = "";
+  calcState.awaitingNewInput = true;
+  calcState.operator = null;
 }
 
 function applyPercentage(operator, baseValue, percentageValue) {
@@ -40,16 +25,6 @@ function applyPercentage(operator, baseValue, percentageValue) {
     default:
       return;
   }
-}
-
-function handleSqrtOperation() {
-  let result = Math.sqrt(calcState.firstNumber);
-  calcState.displayValue = result.toString();
-  updateDisplay(calcState.displayValue);
-  calcState.firstNumber = result;
-  calcState.displayValue = "";
-  calcState.awaitingNewInput = true;
-  calcState.operator = null;
 }
 
 function handlePercentageOperation() {
@@ -88,5 +63,3 @@ function handleStandardOperation(symbol) {
   }
   calcState.operator = symbol;
 }
-
-export { add, subtract, multiply, divide, percentage, applyPercentage, handleSqrtOperation, handlePercentageOperation, handleRepeatLastOperation, handleStandardOperation }

@@ -1,6 +1,4 @@
-import * as BTN from "./inputHandlers.js";
-
-function setupUserInteraction() {
+export function setupUserInteraction() {
   const displayDigits = document.getElementById('displayText');
   const allButtons = document.querySelectorAll(".button:not(#color-scheme-toggle)");
 
@@ -39,20 +37,3 @@ function setupUserInteraction() {
     }
   });
 }
-
-function handleUserInput(e) {
-  const target = e.target;
-  const value = target.dataset.value;
-
-  if (target.classList.contains("number")) {
-    BTN.handleNumber(value);
-  } else if (target.classList.contains("special")) {
-    BTN.handleSpecial(value);
-  } else if (target.classList.contains("operator")) {
-    BTN.handleOperator(value);
-  } else if (target.classList.contains("memory")) {
-    BTN.handleMemory(value);
-  }
-}
-
-export { setupUserInteraction }

@@ -1,5 +1,4 @@
-import { calcState } from "./stateManagement.js";
-import { displayText } from "../main.js";
+import { calcState } from "./state.js";
 
 function updateDisplay(value) {
   if (calcState.awaitingNewInput) {

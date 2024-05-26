@@ -1,0 +1,30 @@
+{
+  "name": "calculator",
+  "version": "1.0.0",
+  "description": "My first vanilla JS calculator project!",
+  "main": "index.html",
+  "source": "index.html",
+  "scripts": {
+    "start": "parcel",
+    "build": "parcel build",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "parcel": "latest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rafa-net/calculator.git"
+  },
+  "keywords": [
+    "webapp",
+    "html-css-javascript",
+    "theodinprojectfoundations"
+  ],
+  "author": "Rafael Bueno",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rafa-net/calculator/issues"
+  },
+  "homepage": "https://github.com/rafa-net/calculator#readme"
+}

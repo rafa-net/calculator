@@ -1,4 +1,4 @@
-const calcState = {
+export const calcState = {
   firstNumber: null,
   operator: null,
   secondNumber: null,
@@ -13,5 +13,3 @@ const calcState = {
   memoryMinusPressed: 0,
   grandTotal: 0
 };
-
-export { calcState };
