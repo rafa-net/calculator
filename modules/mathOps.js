@@ -1,24 +1,7 @@
-function operate(op, a, b) {
-  a = parseFloat(a);
-  b = parseFloat(b);
-
-  if (op === "+") {
-    grandTotal += add(a, b);
-    return add(a, b);
-  } else if (op === "-") {
-    return subtract(a, b);
-  } else if (op === "*") {
-    grandTotal += multiply(a, b);
-    return multiply(a, b);
-  } else if (op === "/") {
-    if (b === 0) {
-      alert(`Oops! Dividing ${a} by ${b} is like trying to split zero cookies among friends—it just doesn't work. Try a different divisor.`);
-      return 0;
-    }
-    grandTotal += divide(a, b);
-    return divide(a, b);
-  }
-}
+import { formatResult } from "./resultFormatting.js";
+import { operate } from "../main.js";
+import { calcState } from "./stateManagement.js";
+import { updateDisplay } from "./displayBuffer.js";
 
 function add(a, b) {
   return a + b;
@@ -34,10 +17,6 @@ function multiply(a, b) {
 
 function divide(a, b) {
   return a / b;
-}
-
-function power(a, b) {
-  return a ** b;
 }
 
 function percentage(a, b) {
@@ -64,48 +43,50 @@ function applyPercentage(operator, baseValue, percentageValue) {
 }
 
 function handleSqrtOperation() {
-  let result = Math.sqrt(firstNumber);
-  displayValue = result.toString();
-  updateDisplay(displayValue);
-  firstNumber = result;
-  displayValue = "";
-  awaitingNewInput = true;
-  operator = null;
+  let result = Math.sqrt(calcState.firstNumber);
+  calcState.displayValue = result.toString();
+  updateDisplay(calcState.displayValue);
+  calcState.firstNumber = result;
+  calcState.displayValue = "";
+  calcState.awaitingNewInput = true;
+  calcState.operator = null;
 }
 
 function handlePercentageOperation() {
-  let result = applyPercentage(operator, parseFloat(firstNumber), parseFloat(displayValue));
-  grandTotal += result;
-  displayValue = result.toString();
-  updateDisplay(displayValue);
-  firstNumber = result;
-  displayValue = "";
-  awaitingNewInput = true;
-  operator = null;
+  let result = applyPercentage(calcState.operator, parseFloat(calcState.firstNumber), parseFloat(calcState.displayValue));
+  calcState.grandTotal += result;
+  calcState.displayValue = result.toString();
+  updateDisplay(calcState.displayValue);
+  calcState.firstNumber = result;
+  calcState.displayValue = "";
+  calcState.awaitingNewInput = true;
+  calcState.operator = null;
 }
 
 function handleRepeatLastOperation() {
-  let result = operate(lastOperator, firstNumber, lastSecondNumber);
-  displayValue = formatResult(result);
-  result = displayValue;
-  updateDisplay(displayValue);
-  firstNumber = result;
+  let result = operate(calcState.lastOperator, calcState.firstNumber, calcState.lastSecondNumber);
+  calcState.displayValue = formatResult(result);
+  result = calcState.displayValue;
+  updateDisplay(calcState.displayValue);
+  calcState.firstNumber = result;
 }
 
 function handleStandardOperation(symbol) {
-  if (operator && firstNumber !== null && displayValue !== "") {
-    secondNumber = displayValue;
-    let result = operate(operator, firstNumber, secondNumber);
-    displayValue = formatResult(result);
-    result = displayValue;
-    updateDisplay(displayValue);
-    firstNumber = result;
-    lastSecondNumber = secondNumber;
-    lastOperator = operator;
-    displayValue = "";
-  } else if (firstNumber === null && displayValue !== "") {
-    firstNumber = displayValue;
-    displayValue = "";
+  if (calcState.operator && calcState.firstNumber !== null && calcState.displayValue !== "") {
+    calcState.secondNumber = calcState.displayValue;
+    let result = operate(calcState.operator, calcState.firstNumber, calcState.secondNumber);
+    calcState.displayValue = formatResult(result);
+    result = calcState.displayValue;
+    updateDisplay(calcState.displayValue);
+    calcState.firstNumber = result;
+    calcState.lastSecondNumber = calcState.secondNumber;
+    calcState.lastOperator = calcState.operator;
+    calcState.displayValue = "";
+  } else if (calcState.firstNumber === null && calcState.displayValue !== "") {
+    calcState.firstNumber = calcState.displayValue;
+    calcState.displayValue = "";
   }
-  operator = symbol;
+  calcState.operator = symbol;
 }
+
+export { add, subtract, multiply, divide, percentage, applyPercentage, handleSqrtOperation, handlePercentageOperation, handleRepeatLastOperation, handleStandardOperation }

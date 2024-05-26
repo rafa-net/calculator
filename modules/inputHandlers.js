@@ -1,31 +1,36 @@
+import { calcState } from "./stateManagement.js";
+import { displayText } from "../main.js";
+import { updateDisplay, clearAll, clearEntry, clearOne } from "./displayBuffer.js";
+import * as MATH from "./mathOps.js";
+
 function handleNumber(numValue) {
   if ((numValue === "0" || numValue === "00") && displayText.innerHTML === "0") {
     return;
   }
-  if (operator === "%") {
-    displayValue += numValue
-    updateDisplay(displayValue);
+  if (calcState.operator === "%") {
+    calcState.displayValue += numValue
+    updateDisplay(calcState.displayValue);
     return;
   }
-  if (awaitingNewInput || repeatLastOperation) {
-    displayValue = numValue;
-    updateDisplay(displayValue);
-    awaitingNewInput = false;
-    repeatLastOperation = false;
+  if (calcState.awaitingNewInput || calcState.repeatLastOperation) {
+    calcState.displayValue = numValue;
+    updateDisplay(calcState.displayValue);
+    calcState.awaitingNewInput = false;
+    calcState.repeatLastOperation = false;
   } else {
-    displayValue += numValue;
-    updateDisplay(displayValue);
+    calcState.displayValue += numValue;
+    updateDisplay(calcState.displayValue);
   }
-  if (operator && displayText.innerHTML === firstNumber && secondNumber === null) {
-    displayValue = numValue;
-    updateDisplay(displayValue);
+  if (calcState.operator && displayText.innerHTML === calcState.firstNumber && calcState.secondNumber === null) {
+    calcState.displayValue = numValue;
+    updateDisplay(calcState.displayValue);
   }
-  if (!operator) {
-    firstNumber = displayValue;
+  if (!calcState.operator) {
+    calcState.firstNumber = calcState.displayValue;
   } else {
-    secondNumber = displayValue;
+    calcState.secondNumber = calcState.displayValue;
   }
-  memoryRecallPressed = 0;
+  calcState.memoryRecallPressed = 0;
 }
 
 function handleSpecial(specialValue) {
@@ -39,92 +44,94 @@ function handleSpecial(specialValue) {
       clearOne();
       break;
     case ".":
-      if (displayText.innerHTML === "0" && !displayValue.includes(".")) {
-        displayValue = "0.";
+      if (displayText.innerHTML === "0" && !calcState.displayValue.includes(".")) {
+        calcState.displayValue = "0.";
       }
-      if (!displayValue.includes(".") && awaitingNewInput && firstNumber !== 0) {
-        displayValue = "0.";
+      if (!calcState.displayValue.includes(".") && calcState.awaitingNewInput && calcState.firstNumber !== 0) {
+        calcState.displayValue = "0.";
       }
-      if (!displayValue.includes(".")) {
-        displayValue += ".";
+      if (!calcState.displayValue.includes(".")) {
+        calcState.displayValue += ".";
       }
-      updateDisplay(displayValue);
+      updateDisplay(calcState.displayValue);
       break;
     case "=":
       handleOperator(null);
       break;
   }
-  memoryRecallPressed = 0;
+  calcState.memoryRecallPressed = 0;
 }
 
 function handleOperator(symbol) {
   if (symbol === "sqrt") {
-    handleSqrtOperation();
-  } else if (symbol === '%' && !operator) {
+    MATH.handleSqrtOperation();
+  } else if (symbol === '%' && !calcState.operator) {
     return;
-  } else if (symbol === '%' && operator !== "%" && firstNumber !== null && displayValue !== "") {
-    handlePercentageOperation();
-  } else if (symbol === null && repeatLastOperation) {
-    handleRepeatLastOperation();
+  } else if (symbol === '%' && calcState.operator !== "%" && calcState.firstNumber !== null && calcState.displayValue !== "") {
+    MATH.handlePercentageOperation();
+  } else if (symbol === null && calcState.repeatLastOperation && calcState.operator) {
+    MATH.handleRepeatLastOperation();
   } else {
-    handleStandardOperation(symbol);
+    MATH.handleStandardOperation(symbol);
   }
 
   if (symbol === null) {
-    repeatLastOperation = true;
+    calcState.repeatLastOperation = true;
   }
-  awaitingNewInput = true;
-  memoryRecallPressed = 0;
+  calcState.awaitingNewInput = true;
+  calcState.memoryRecallPressed = 0;
 }
 
 function handleMemory(memory) {
   if (memory === "GT") {
-    displayValue = grandTotal;
-    firstNumber = displayValue;
-    updateDisplay(displayValue);
-    displayValue = "";
+    calcState.displayValue = grandTotal;
+    calcState.firstNumber = calcState.displayValue;
+    updateDisplay(calcState.displayValue);
+    calcState.displayValue = "";
   }
-  if (memoryRecallPressed > 1) {
-    memoryNumber = 0;
-    memoryPlusPressed = 0;
-    memoryMinusPressed = 0;
+  if (calcState.memoryRecallPressed > 1) {
+    calcState.memoryNumber = 0;
+    calcState.memoryPlusPressed = 0;
+    calcState.memoryMinusPressed = 0;
   }
-  if (memory === "MR" && memoryNumber === 0) {
-    firstNumber = null;
-    operator = null;
-    secondNumber = null;
-    lastOperator = null;
-    lastSecondNumber = null;
-    awaitingNewInput = null;
-    repeatLastOperation = false;
-    memoryRecallPressed = 0;
-    memoryPlusPressed = 0;
-    memoryMinusPressed = 0;
-    displayValue = "0";
-    updateDisplay(displayValue);
-  } else if (memory === "MR" && memoryNumber !== 0) {
-    displayValue = memoryNumber;
-    updateDisplay(displayValue);
-    memoryRecallPressed++;
+  if (memory === "MR" && calcState.memoryNumber === 0) {
+    calcState.firstNumber = null;
+    calcState.operator = null;
+    calcState.secondNumber = null;
+    calcState.lastOperator = null;
+    calcState.lastSecondNumber = null;
+    calcState.awaitingNewInput = null;
+    calcState.repeatLastOperation = false;
+    calcState.memoryRecallPressed = 0;
+    calcState.memoryPlusPressed = 0;
+    calcState.memoryMinusPressed = 0;
+    calcState.displayValue = "0";
+    updateDisplay(calcState.displayValue);
+  } else if (memory === "MR" && calcState.memoryNumber !== 0) {
+    calcState.displayValue = calcState.memoryNumber;
+    updateDisplay(calcState.displayValue);
+    calcState.memoryRecallPressed++;
     return;
   }
-  if (memory === "M-" && memoryNumber === 0) {
+  if (memory === "M-" && calcState.memoryNumber === 0) {
     return;
   }
   else if (memory === "M-") {
-    memoryNumber = (Number(memoryNumber) - Number(displayValue));
-    displayValue = memoryNumber.toString();
+    calcState.memoryNumber = (Number(calcState.memoryNumber) - Number(calcState.displayValue));
+    calcState.displayValue = calcState.memoryNumber.toString();
     return;
   }
 
-  if (memory === "M+" && memoryPlusPressed === 0) {
-    memoryNumber = displayValue;
-    memoryPlusPressed++;
-    displayValue = "";
-  } else if (memory === "M+" && memoryPlusPressed !== 0) {
-    memoryNumber = (Number(displayValue) + Number(memoryNumber));
-    displayValue = memoryNumber.toString();
-    memoryPlusPressed++;
+  if (memory === "M+" && calcState.memoryPlusPressed === 0) {
+    calcState.memoryNumber = calcState.displayValue;
+    calcState.memoryPlusPressed++;
+    calcState.displayValue = "";
+  } else if (memory === "M+" && calcState.memoryPlusPressed !== 0) {
+    calcState.memoryNumber = (Number(calcState.displayValue) + Number(calcState.memoryNumber));
+    calcState.displayValue = calcState.memoryNumber.toString();
+    calcState.memoryPlusPressed++;
   }
 
 }
+
+export { handleNumber, handleSpecial, handleOperator, handleMemory }

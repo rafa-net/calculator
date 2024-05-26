@@ -1,4 +1,4 @@
-function formatResult(result) {
+export function formatResult(result) {
   if (Number.isInteger(result)) {
     if (String(result).length > 14) {
       let processedInteger = result.toString();

@@ -1,10 +1,11 @@
+import * as BTN from "./inputHandlers.js";
+
 function setupUserInteraction() {
   const displayDigits = document.getElementById('displayText');
   const allButtons = document.querySelectorAll(".button:not(#color-scheme-toggle)");
 
   allButtons.forEach(button => {
-    button.addEventListener("click", handleUserInput);
-
+    button.addEventListener("click", event => handleUserInput(event, displayDigits));
     button.addEventListener("mousedown", () => {
       button.classList.add('keyboard-active');
       displayDigits.classList.add('display-blink');
@@ -39,19 +40,19 @@ function setupUserInteraction() {
   });
 }
 
-function handleUserInput(event) {
-  const target = event.target;
+function handleUserInput(e) {
+  const target = e.target;
   const value = target.dataset.value;
 
   if (target.classList.contains("number")) {
-    handleNumber(value);
+    BTN.handleNumber(value);
   } else if (target.classList.contains("special")) {
-    handleSpecial(value);
+    BTN.handleSpecial(value);
   } else if (target.classList.contains("operator")) {
-    handleOperator(value);
+    BTN.handleOperator(value);
   } else if (target.classList.contains("memory")) {
-    handleMemory(value);
+    BTN.handleMemory(value);
   }
 }
 
-export { setupUserInteraction, handleUserInput }
+export { setupUserInteraction }
