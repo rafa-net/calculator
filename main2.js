@@ -3,9 +3,9 @@ import { setupDarkTheme, keyboardSupport, displayBlink } from "./modules/ui";
 import { handleNumber, handleSpecial, handleOperator, handleMemory } from "./modules/handlers";  // Assuming these are exported from handlers module
 
 /* Initialize UI */
-setupDarkTheme();
-keyboardSupport();
-displayBlink();
+toggleDarkMode();
+setSizeControl();
+
 
 /* Get user input values */
 document.addEventListener("DOMContentLoaded", () => {

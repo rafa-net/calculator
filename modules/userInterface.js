@@ -30,3 +30,20 @@ function setSizeControl() {
     });
   });
 }
+
+function addDigitBlink() {
+  document.addEventListener("DOMContentLoaded", () => {
+    const buttons = document.querySelectorAll('button:not(#theme-toggle)');
+    buttons.forEach(button => {
+      button.addEventListener("mousedown", () => {
+        const displayText = document.getElementById('display');
+        displayText.classList.add(`display-blink`);
+      });
+      button.addEventListener("mouseup", () => {
+        const displayText = document.getElementById('display');
+        displayText.classList.remove(`display-blink`);
+      });
+
+    });
+  });
+}

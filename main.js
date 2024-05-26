@@ -91,27 +91,9 @@ document.addEventListener("DOMContentLoaded", () => {
   setupButtonListeners(specialButtons);
   setupButtonListeners(operatorButtons);
   setupButtonListeners(memoryButtons);
-  document.addEventListener('keydown', handleGlobalKeyDown);
-  document.addEventListener('keyup', handleGlobalKeyUp);
-});
-
-function handleGlobalKeyDown(e) {
-  console.log("Key pressed: " + e.key);
-  const buttonPressed = document.querySelector(`.button[data-key="${e.key}"]`);
-  if (buttonPressed) {
-    buttonPressed.click();
-    buttonPressed.classList.add('keyboard-active');
-    displayText.classList.add(`display-blink`);
-  }
 }
 
-function handleGlobalKeyUp(e) {
-  const buttonPressed = document.querySelector(`.button[data-key="${e.key}"]`);
-  if (buttonPressed) {
-    buttonPressed.classList.remove('keyboard-active');
-    displayText.classList.remove(`display-blink`);
-  }
-}
+
 
 function setupButtonListeners(buttons) {
   buttons.forEach(button => {
