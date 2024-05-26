@@ -419,3 +419,14 @@ function updateDisplay(value) {
     displayText.innerHTML = displayValue;
   }
 }
+
+document.addEventListener('DOMContentLoaded', function () {
+  const slider = document.getElementById('scale-slider');
+  const element = document.getElementById('container');
+
+  slider.addEventListener('input', function () {
+    const scaleValue = this.value;
+    element.style.transform = `scale(${scaleValue})`;
+  });
+});
+

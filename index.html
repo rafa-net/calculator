@@ -9,7 +9,7 @@
 </head>
 
 <body class="light-mode">
-  <div class="container">
+  <div id="container" class="container">
     <div id="display" class="display">
       <span id="displayText">
         0
@@ -54,7 +54,8 @@
       <button class="button operator" tabindex="0" data-key="+" data-value="+">+</button>
     </div>
   </div>
-  <script src="scripts.js"></script>
+  <input type="range" id="scale-slider" min="0.5" max="1" step="0.005" value="0.6">
+  <script type="text/javascript" src="scripts.js"></script>
 </body>
 
 </html>
