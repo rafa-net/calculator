@@ -54,3 +54,4 @@ function handleUserInput(event) {
   }
 }
 
+export { setupUserInteraction, handleUserInput }

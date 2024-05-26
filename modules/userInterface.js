@@ -19,7 +19,7 @@ function toggleDarkMode() {
   });
 }
 
-function setSizeControl() {
+function setSizeController() {
   document.addEventListener('DOMContentLoaded', function () {
     const slider = document.getElementById('scale-slider');
     const element = document.getElementById('container');
@@ -30,3 +30,5 @@ function setSizeControl() {
     });
   });
 }
+
+export { toggleDarkMode, setSizeController }
