@@ -69,7 +69,7 @@ function handleOperator(symbol) {
     return;
   } else if (symbol === '%' && calcState.operator !== "%" && calcState.firstNumber !== null && calcState.displayValue !== "") {
     MATH.handlePercentageOperation();
-  } else if (symbol === null && calcState.repeatLastOperation && calcState.operator) {
+  } else if (symbol === null && calcState.repeatLastOperation && calcState.secondNumber !== null) {
     MATH.handleRepeatLastOperation();
   } else {
     MATH.handleStandardOperation(symbol);
@@ -84,7 +84,7 @@ function handleOperator(symbol) {
 
 function handleMemory(memory) {
   if (memory === "GT") {
-    calcState.displayValue = grandTotal;
+    calcState.displayValue = calcState.grandTotal;
     calcState.firstNumber = calcState.displayValue;
     updateDisplay(calcState.displayValue);
     calcState.displayValue = "";
