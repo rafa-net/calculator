@@ -1,55 +1,28 @@
 import { ST } from "../state.js";
-import { operate } from "../processor/cpu.js";
+import { applyPercentage, operate } from "../processor/cpu.js";
 import { updateDisplay } from "../display.js";
 import { formatResult } from "../utils.js";
 
-function applyPercentage(operator, baseValue, percentageValue) {
+export function handleMathOperation(operation) {
   let result;
-  let percentageDecimal = percentageValue / 100;
-  switch (operator) {
-    case '+':
-    case '-':
-      result = baseValue * percentageDecimal;
-      return operator === '-' ? baseValue - result : baseValue + result;
-    case '*':
-      result = baseValue * percentageDecimal;
-      return result;
-    case '/':
-      result = baseValue / percentageDecimal;
-      return result;
-    default:
-      return;
+
+  if (operation === "percentage") {
+    result = applyPercentage(ST.operator, parseFloat(ST.firstNumber), parseFloat(ST.displayValue));
+    ST.grandTotal += result;
+  } else if (operation === "sqrt") {
+      if (ST.operator === null) {
+        result = Math.sqrt(parseFloat(ST.firstNumber));
+      } else if (ST.displayValue !== "") {
+        result = Math.sqrt(parseFloat(ST.displayValue));
+      }
+  } else if (operation === "repeatLast") {
+    result = operate(ST.lastOperator, ST.firstNumber, ST.lastSecondNumber);
   }
-}
 
-function handlePercentageOperation() {
-  let result = applyPercentage(ST.operator, parseFloat(ST.firstNumber), parseFloat(ST.displayValue));
-  ST.grandTotal += result;
-  ST.displayValue = result.toString();
-  updateDisplay(ST.displayValue);
-  ST.firstNumber = result;
-  ST.displayValue = "";
-  ST.awaitingNewInput = true;
-  ST.operator = null;
-}
-
-function handleSqrtOperation() {
-  let result = Math.sqrt(ST.firstNumber);
-  ST.displayValue = result.toString();
-  updateDisplay(ST.displayValue);
-  ST.firstNumber = result;
-  ST.displayValue = "";
-  ST.awaitingNewInput = true;
-  ST.operator = null;
-}
-
-function handleRepeatLastOperation() {
-  let result = operate(ST.lastOperator, ST.firstNumber, ST.lastSecondNumber);
   ST.displayValue = formatResult(result);
-  result = ST.displayValue;
   updateDisplay(ST.displayValue);
-  ST.firstNumber = result;
+  ST.firstNumber = ST.displayValue;
+  ST.displayValue = "";
+  ST.awaitingNewInput = true;
+  ST.operator = null;
 }
-
-export { handlePercentageOperation, handleSqrtOperation,
-         handleRepeatLastOperation }

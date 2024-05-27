@@ -1,7 +1,7 @@
 const puppeteer = require('puppeteer');
 
 (async () => {
-  const browser = await puppeteer.launch({ headless: false });
+  const browser = await puppeteer.launch();
   const page = await browser.newPage();
 
   await page.goto('http://127.0.0.1:5500/src/index.html', { waitUntil: 'networkidle0' });
@@ -56,15 +56,19 @@ const puppeteer = require('puppeteer');
     { sequence: ['2', '5', '0', '+', '1', '0', '0', '%', '='], expectedResult: '500' },
     { sequence: ['1', '5', '0', '*', '2', '0', '%', '-', '3', '0', '='], expectedResult: '0' },
     { sequence: ['7', '7', '7', '*', '1', '1', '1', '='], expectedResult: '86247' },
-    { sequence: ['1', '0', '*', '1', '0', '=', '='], expectedResult: '100' },
+    { sequence: ['1', '0', '*', '1', '0', '=', '='], expectedResult: '1000' },
     { sequence: ['9', '9', '9', '/', '3', '='], expectedResult: '333' },
     { sequence: ['4', '4', '4', '+', '2', '2', '2', '='], expectedResult: '666' },
     { sequence: ['3', '6', '0', '/', '6', '='], expectedResult: '60' },
     { sequence: ['1', '2', '3', '4', '5', 'bksp', 'bksp', 'bksp', '='], expectedResult: '12' },
     { sequence: ['1', '0', '0', '0', '/', '2', '5', '%', '='], expectedResult: '4000' },
     { sequence: ['1', '0', '*', '5', '0', '%', '='], expectedResult: '5' },
-    { sequence: ['2', '5', '*', '4', 'sqrt', '='], expectedResult: '10' },
-    { sequence: ['1', '0', '0', '/', '2', '0', '%', '='], expectedResult: '500' }
+    { sequence: ['2', '5', '*', '4', '=', 'sqrt'], expectedResult: '10' },
+    { sequence: ['1', '0', '0', '/', '2', '0', '%', '='], expectedResult: '500' },
+    { sequence: ['2', '5', '*', '4', '=', 'sqrt'], expectedResult: '10' },
+    { sequence: ['2', '5', '*', '4', 'sqrt'], expectedResult: '2' },
+    { sequence: ['2', '*', '4', '.', '5', '=', 'sqrt'], expectedResult: '3' },
+    { sequence: ['8', '*', '8', '=', 'sqrt'], expectedResult: '8' }
   ];
 
   for (const test of tests) {

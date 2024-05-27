@@ -3,6 +3,25 @@ import * as CALC from "../instructions/basicMath.js"
 import { updateDisplay } from "../display.js";
 import { formatResult } from "../utils.js";
 
+export function applyPercentage(operator, baseValue, percentageValue) {
+  let result;
+  let percentageDecimal = percentageValue / 100;
+  switch (operator) {
+    case '+':
+    case '-':
+      result = baseValue * percentageDecimal;
+      return operator === '-' ? baseValue - result : baseValue + result;
+    case '*':
+      result = baseValue * percentageDecimal;
+      return result;
+    case '/':
+      result = baseValue / percentageDecimal;
+      return result;
+    default:
+      return;
+  }
+}
+
 export function operate(op, a, b) {
   a = parseFloat(a);
   b = parseFloat(b);
@@ -41,6 +60,8 @@ export function compute(symbol) {
     ST.firstNumber = ST.displayValue;
     ST.displayValue = "";
     ST.awaitingNewInput = true;
+  } else if (ST.displayValue) {
+    ST.lastOperator = symbol;
   }
   ST.operator = symbol;
 }
