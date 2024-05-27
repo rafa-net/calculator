@@ -1,35 +1,5 @@
 import { ST } from "../state.js";
 import { updateDisplay } from "../display.js";
-import { handleOperator } from "./operator.js";
-
-export function handleSpecial(specialValue) {
-  switch (specialValue) {
-    case "AC":
-      clearAll();
-      break;
-    case "CE":
-      clearEntry();
-    case "bksp":
-      clearOne();
-      break;
-    case ".":
-      if (displayText.innerHTML === "0" && !ST.displayValue.includes(".")) {
-        ST.displayValue = "0.";
-      }
-      if (!ST.displayValue.includes(".") && ST.awaitingNewInput && ST.firstNumber !== 0) {
-        ST.displayValue = "0.";
-      }
-      if (!ST.displayValue.includes(".")) {
-        ST.displayValue += ".";
-      }
-      updateDisplay(ST.displayValue);
-      break;
-    case "=":
-      handleOperator(null);
-      break;
-  }
-  ST.memoryRecallPressed = 0;
-}
 
 function clearAll() {
   ST.firstNumber = null;
@@ -37,7 +7,7 @@ function clearAll() {
   ST.secondNumber = null;
   ST.awaitingNewInput = null;
   ST.lastOperator = null;
-  ST.lastSecondNumber = null;
+  ST.lastOperand = null;
   ST.repeatLastOperation = false;
   ST.memoryNumber = 0;
   ST.memoryRecallPressed = 0;
@@ -77,3 +47,38 @@ function clearOne() {
     updateDisplay(ST.displayValue);
   }
 }
+
+function addPoint() {
+  if (displayText.innerHTML === "0" && !ST.displayValue.includes(".")) {
+    ST.displayValue = "0.";
+  }
+  if (!ST.displayValue.includes(".") && ST.awaitingNewInput && ST.firstNumber !== 0) {
+    ST.displayValue = "0.";
+  }
+  if (!ST.displayValue.includes(".")) {
+    ST.displayValue += ".";
+  }
+  updateDisplay(ST.displayValue);
+}
+
+function formatResult(result) {
+  if (Number.isInteger(result)) {
+    if (String(result).length > 14) {
+      let processedInteger = result.toString();
+      processedInteger = processedInteger.substring(0, 14);
+      return processedInteger;
+    }
+    return result.toString();
+  } else {
+    let resultString = result.toString();
+    let [integerPart, fractionalPart] = resultString.split(".");
+    fractionalPart = fractionalPart || "";
+    let maxDecimalPlaces = 13 - (integerPart.length);
+    if (maxDecimalPlaces < 0) {
+      maxDecimalPlaces = 0;
+    }
+    return result.toFixed(maxDecimalPlaces);
+  }
+}
+
+export { clearAll, clearEntry, clearOne, addPoint, formatResult };

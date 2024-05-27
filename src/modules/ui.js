@@ -1,59 +1,34 @@
-import { handleNumber } from "./input/number.js";
-import { handleSpecial } from "./input/special.js";
-import { handleOperator } from "./input/operator.js";
-import { handleMemory } from "./input/memory.js";
-
-function handleUserInput(e) {
-  const target = e.target;
-  const value = target.dataset.value;
-
-  if (target.classList.contains("number")) {
-    handleNumber(value);
-  } else if (target.classList.contains("special")) {
-    handleSpecial(value);
-  } else if (target.classList.contains("operator")) {
-    handleOperator(value);
-  } else if (target.classList.contains("memory")) {
-    handleMemory(value);
-  }
+function toggleDarkMode() {
+  document.addEventListener('DOMContentLoaded', function () {
+    const toggleButton = document.getElementById('color-scheme-toggle');
+    toggleButton.addEventListener('click', function () {
+      this.classList.toggle('dark-mode');
+      const bodyElement = document.body;
+      if (bodyElement.classList.contains('dark-mode') && display.classList.contains('dark-mode')) {
+        bodyElement.classList.remove('dark-mode');
+        bodyElement.classList.add('light-mode');
+        display.classList.remove('dark-mode');
+        display.classList.add('light-mode');
+      } else {
+        bodyElement.classList.remove('light-mode');
+        bodyElement.classList.add('dark-mode');
+        display.classList.remove('light-mode');
+        display.classList.add('dark-mode');
+      }
+    });
+  });
 }
 
-export function setupUserInteraction() {
-  const displayDigits = document.getElementById('displayText');
-  const allButtons = document.querySelectorAll(".button:not(#color-scheme-toggle)");
+function setSizeController() {
+  document.addEventListener('DOMContentLoaded', function () {
+    const slider = document.getElementById('scale-slider');
+    const element = document.getElementById('container');
 
-  allButtons.forEach(button => {
-    button.addEventListener("click", event => handleUserInput(event, displayDigits));
-    button.addEventListener("mousedown", () => {
-      button.classList.add('keyboard-active');
-      displayDigits.classList.add('display-blink');
+    slider.addEventListener('input', function () {
+      const scaleValue = this.value;
+      element.style.transform = `scale(${scaleValue})`;
     });
-
-    button.addEventListener("mouseup", () => {
-      button.classList.remove('keyboard-active');
-      displayDigits.classList.remove('display-blink');
-    });
-
-    button.addEventListener("mouseleave", () => {
-      button.classList.remove('keyboard-active');
-      displayDigits.classList.remove('display-blink');
-    });
-  });
-
-  document.addEventListener('keydown', (e) => {
-    const buttonPressed = document.querySelector(`.button[data-key="${e.key}"]`);
-    if (buttonPressed) {
-      buttonPressed.click();
-      buttonPressed.classList.add('keyboard-active');
-      displayDigits.classList.add('display-blink');
-    }
-  });
-
-  document.addEventListener('keyup', (e) => {
-    const buttonPressed = document.querySelector(`.button[data-key="${e.key}"]`);
-    if (buttonPressed) {
-      buttonPressed.classList.remove('keyboard-active');
-      displayDigits.classList.remove('display-blink');
-    }
   });
 }
+
+export { toggleDarkMode, setSizeController };

@@ -1,3 +1,4 @@
+
 const numberButtons = document.querySelectorAll(".button.number");
 const specialButtons = document.querySelectorAll(".button.special");
 const operatorButtons = document.querySelectorAll(".button.operator");
@@ -44,6 +45,24 @@ function percentage(a, b) {
   return (100 * a) / b;
 }
 
+document.addEventListener('DOMContentLoaded', function () {
+  const toggleButton = document.getElementById('color-scheme-toggle');
+  toggleButton.addEventListener('click', function () {
+    this.classList.toggle('dark-mode');
+    const bodyElement = document.body;
+    if (bodyElement.classList.contains('dark-mode') && display.classList.contains('dark-mode')) {
+      bodyElement.classList.remove('dark-mode');
+      bodyElement.classList.add('light-mode');
+      display.classList.remove('dark-mode');
+      display.classList.add('light-mode');
+    } else {
+      bodyElement.classList.remove('light-mode');
+      bodyElement.classList.add('dark-mode');
+      display.classList.remove('light-mode');
+      display.classList.add('dark-mode');
+    }
+  });
+});
 
 function applyPercentage(operator, baseValue, percentageValue) {
   let result;
@@ -91,9 +110,27 @@ document.addEventListener("DOMContentLoaded", () => {
   setupButtonListeners(specialButtons);
   setupButtonListeners(operatorButtons);
   setupButtonListeners(memoryButtons);
+  document.addEventListener('keydown', handleGlobalKeyDown);
+  document.addEventListener('keyup', handleGlobalKeyUp);
+});
+
+function handleGlobalKeyDown(e) {
+  console.log("Key pressed: " + e.key);
+  const buttonPressed = document.querySelector(`.button[data-key="${e.key}"]`);
+  if (buttonPressed) {
+    buttonPressed.click();
+    buttonPressed.classList.add('keyboard-active');
+    displayText.classList.add(`display-blink`);
+  }
 }
 
-
+function handleGlobalKeyUp(e) {
+  const buttonPressed = document.querySelector(`.button[data-key="${e.key}"]`);
+  if (buttonPressed) {
+    buttonPressed.classList.remove('keyboard-active');
+    displayText.classList.remove(`display-blink`);
+  }
+}
 
 function setupButtonListeners(buttons) {
   buttons.forEach(button => {
@@ -252,8 +289,9 @@ function handleMemory(memory) {
     displayValue = memoryNumber.toString();
     memoryPlusPressed++;
   }
-  
+
 }
+
 
 function handleSqrtOperation() {
   let result = Math.sqrt(firstNumber);
@@ -302,8 +340,6 @@ function handleStandardOperation(symbol) {
   operator = symbol;
 }
 
-
-// result processor
 function formatResult(result) {
   if (Number.isInteger(result)) {
     if (String(result).length > 14) {
@@ -324,7 +360,6 @@ function formatResult(result) {
   }
 }
 
-// 
 function clearAll() {
   firstNumber = null;
   operator = null;
@@ -350,6 +385,7 @@ function clearEntry() {
   }
 }
 
+
 function clearOne() {
   if (displayText.innerHTML.length === 1 || displayText.innerHTML === "0") {
     displayValue = "";
@@ -370,8 +406,6 @@ function clearOne() {
   }
 }
 
-
-// user interface
 function updateDisplay(value) {
   if (awaitingNewInput) {
     displayText.innerHTML = "";
@@ -386,4 +420,12 @@ function updateDisplay(value) {
   }
 }
 
+document.addEventListener('DOMContentLoaded', function () {
+  const slider = document.getElementById('scale-slider');
+  const element = document.getElementById('container');
 
+  slider.addEventListener('input', function () {
+    const scaleValue = this.value;
+    element.style.transform = `scale(${scaleValue})`;
+  });
+});

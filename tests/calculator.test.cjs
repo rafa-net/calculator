@@ -68,7 +68,11 @@ const puppeteer = require('puppeteer');
     { sequence: ['2', '5', '*', '4', '=', 'sqrt'], expectedResult: '10' },
     { sequence: ['2', '5', '*', '4', 'sqrt'], expectedResult: '2' },
     { sequence: ['2', '*', '4', '.', '5', '=', 'sqrt'], expectedResult: '3' },
-    { sequence: ['8', '*', '8', '=', 'sqrt'], expectedResult: '8' }
+    { sequence: ['8', '*', '8', '=', 'sqrt'], expectedResult: '8' },
+    { sequence: ['2', '6', '5', '*', '2', '/', '6', '+', '5', '='], expectedResult: '93.3' },
+    { sequence: ['8', '5', '*', '1', '2', 'sqrt', 'CE', '*', '2', '='], expectedResult: '0' },
+    { sequence: ['3', '2', '-', '1', '8', '0', '*', '5', '='], expectedResult: '-740' },
+    { sequence: ['7', '6', '+', '2', '/', '6', '*', '5', '0', '%', 'sqrt', '=', '=', '=', '='], expectedResult: '5601.2729' }
   ];
 
   for (const test of tests) {
