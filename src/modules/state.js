@@ -1,4 +1,4 @@
-export const calcState = {
+export const ST = {
   firstNumber: null,
   operator: null,
   secondNumber: null,

@@ -50,3 +50,5 @@ function formatResult(result) {
     return result.toFixed(maxDecimalPlaces);
   }
 }
+
+export { toggleDarkMode, setSizeController, formatResult };

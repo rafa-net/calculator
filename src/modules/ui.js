@@ -1,3 +1,23 @@
+import { handleNumber } from "./input/number.js";
+import { handleSpecial } from "./input/special.js";
+import { handleOperator } from "./input/operator.js";
+import { handleMemory } from "./input/memory.js";
+
+function handleUserInput(e) {
+  const target = e.target;
+  const value = target.dataset.value;
+
+  if (target.classList.contains("number")) {
+    handleNumber(value);
+  } else if (target.classList.contains("special")) {
+    handleSpecial(value);
+  } else if (target.classList.contains("operator")) {
+    handleOperator(value);
+  } else if (target.classList.contains("memory")) {
+    handleMemory(value);
+  }
+}
+
 export function setupUserInteraction() {
   const displayDigits = document.getElementById('displayText');
   const allButtons = document.querySelectorAll(".button:not(#color-scheme-toggle)");
