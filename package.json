@@ -2,15 +2,14 @@
   "name": "calculator",
   "version": "1.0.0",
   "description": "My first vanilla JS calculator project!",
-  "main": "index.html",
-  "source": "index.html",
+  "main": "src/main.js",
+  "source": "src/index.html",
   "scripts": {
-    "start": "parcel",
-    "build": "parcel build",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "parcel serve src/index.html",
+    "build": "parcel build src/index.html"
   },
   "devDependencies": {
-    "parcel": "latest"
+    "parcel": "^2.12.0"
   },
   "repository": {
     "type": "git",
