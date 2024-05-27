@@ -36,9 +36,11 @@ export function compute(symbol) {
     ST.lastSecondNumber = ST.secondNumber;
     ST.lastOperator = ST.operator;
     ST.displayValue = "";
+    ST.awaitingNewInput = true;
   } else if (ST.firstNumber === null && ST.displayValue !== "") {
     ST.firstNumber = ST.displayValue;
     ST.displayValue = "";
+    ST.awaitingNewInput = true;
   }
   ST.operator = symbol;
 }
