@@ -1,8 +1,8 @@
-import { ST } from "../state.js";
-import { updateDisplay } from "../display.js";
-import { formatResult } from "./rom.js";
+import { state } from "../state.js";
+import { displayRefresh } from "../cpu/rom.js";
+import { processResult } from "./rom.js";
 
-function operate(op, a, b) {
+function combineAllThree(op, a, b) {
   a = parseFloat(a);
   b = parseFloat(b);
 
@@ -22,8 +22,13 @@ function operate(op, a, b) {
 }
 
 function applyPercentage(operator, baseValue, percentageValue) {
-  let result;
+  
+  baseValue = parseFloat(baseValue);
+  percentageValue = parseFloat(percentageValue);
+
+  let result = null;
   let percentageDecimal = percentageValue / 100;
+  
   switch (operator) {
     case '+':
     case '-':
@@ -40,54 +45,69 @@ function applyPercentage(operator, baseValue, percentageValue) {
   }
 }
 
-export function compute(symbol) {
-  if (ST.operator && ST.firstNumber !== null && ST.displayValue !== "") {
-    ST.secondNumber = ST.displayValue;
-    let result = operate(ST.operator, ST.firstNumber, ST.secondNumber);
+function organizeCalculations(symbol) {
+
+  if (state.operator && state.firstNumber !== null && state.numberBox !== "") {
+    state.secondNumber = state.numberBox;
+    let result = combineAllThree(state.operator, state.firstNumber, state.secondNumber);
+
     finalizeOperation(result, symbol);
-  } else if (ST.firstNumber === null && ST.displayValue !== "") {
-    ST.firstNumber = ST.displayValue;
-    ST.displayValue = "";
-    ST.awaitingNewInput = true;
+  } 
+  
+  // if we still have numbers in the number box, give them to operand one
+  else if (state.firstNumber === null && state.numberBox !== "") {
+    state.firstNumber = state.numberBox;
+    state.numberBox = "";
+    state.awaitingNewInput = true;
   }
-  ST.operator = symbol;
+  
+  state.operator = symbol;
 }
 
-export function handleMathOperation(operation) {
-  let result;
+function handlePercentage() {
+  let result = null;
 
-  switch (operation) {
-    case "percentage":
-      result = applyPercentage(ST.operator, parseFloat(ST.firstNumber), parseFloat(ST.displayValue));
-      break;
-    case "repeatLast":
-      if (ST.previousOperator === "*") {
-        result = operate(ST.previousOperator, ST.previousOperand, ST.firstNumber);
-      } else {
-        result = operate(ST.previousOperator, ST.firstNumber, ST.previousOperand);
-      }
-      break;
-    case "sqrt":
-      result = Math.sqrt(parseFloat(ST.displayValue || ST.firstNumber));
-      break;
+  result = applyPercentage(state.operator, state.firstNumber, state.numberBox);
+  finalizeOperation(result, "%");
+}
+
+function handleRepeatedEquals() {
+  let result = 0;
+
+  if (state.previousOperator === "*") {
+    result = combineAllThree(state.previousOperator, state.previousOperand, state.firstNumber);
+  } else {
+    result = combineAllThree(state.previousOperator, state.firstNumber, state.previousOperand);
   }
-  finalizeOperation(result, operation);
+  finalizeOperation(result, "===");
+}
+
+function handleSquareRoot() {
+  let result = Math.sqrt(parseFloat(state.firstNumber));
+  finalizeOperation(result, "sqrt");
 }
 
 function finalizeOperation(result, operation) {
-  
-  if (operation === null && ST.operator === "*") {
-    ST.previousOperand = ST.firstNumber;
-    ST.previousOperator = ST.operator;
-  } else if (operation === null && ST.operator !== "*") {
-    ST.previousOperand = ST.secondNumber;
-    ST.previousOperator = ST.operator;
+ 
+  // the aim is to capture only the first equals press
+  if (operation === "=" && state.operator === "*") {
+    state.previousOperand = state.firstNumber;
+    state.previousOperator = state.operator;
+  } else if (operation === "=" && (state.operator === "+" || state.operator == "-" || state.operator === "/")) {
+    state.previousOperand = state.secondNumber;
+    state.previousOperator = state.operator;
+  }
+  if (operation === "sqrt" || operation === "%") {
+    state.operator = state.previousOperator;
+  } else {
+    state.operator = operation;
   }
 
-  ST.displayValue = formatResult(result);
-  updateDisplay(ST.displayValue);
-  ST.firstNumber = ST.displayValue;
-  ST.displayValue = "";
-  ST.awaitingNewInput = true;
-  ST.operator = (operation === "sqrt" || operation === "percentage") ? null : operation;
+  state.numberBox = processResult(result);
+  displayRefresh(state.numberBox);
+  state.firstNumber = state.numberBox;
+  state.numberBox = "";
+  state.awaitingNewInput = true;
 }
+
+export { organizeCalculations, handlePercentage, handleRepeatedEquals, handleSquareRoot }

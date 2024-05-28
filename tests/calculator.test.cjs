@@ -79,8 +79,8 @@ const puppeteer = require('puppeteer');
     for (const input of test.sequence) {
       await page.click(`button[data-value="${input}"]`);
     }
-    const displayValue = await page.evaluate(() => document.getElementById('displayText').innerText);
-    console.log(`Test ${test.sequence.join(' ')}: Expected ${test.expectedResult}, got ${displayValue}`);
+    const numberBox = await page.evaluate(() => document.getElementById('displayText').innerText);
+    console.log(`Test ${test.sequence.join(' ')}: Expected ${test.expectedResult}, got ${numberBox}`);
     await page.click('button[data-value="AC"]');
   }
 

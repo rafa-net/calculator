@@ -14,7 +14,5 @@ export function handleSpecialInput(specialValue) {
     case ".":
       CMD.addPoint();
       break;
-    case "=":
-      handleOperatorInput(null);
   }
 }

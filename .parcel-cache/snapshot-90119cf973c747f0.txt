@@ -2439,7 +2439,7 @@
 93/home/rafa-net/I_DONT_BELIEVE_IT/calculator/node_modules/caniuse-lite/data/features/bigint.js1716790439415610301 0
 91/home/rafa-net/I_DONT_BELIEVE_IT/calculator/node_modules/caniuse-lite/data/features/wasm.js1716790440254595297 0
 100/home/rafa-net/I_DONT_BELIEVE_IT/calculator/node_modules/caniuse-lite/data/features/css-when-else.js1716790439691605365 0
-103/home/rafa-net/I_DONT_BELIEVE_IT/calculator/node_modules/caniuse-lite/data/features/getcomputedstyle.js1716790439806603309 0
+103/home/rafa-net/I_DONT_BELIEVE_IT/calculator/node_modules/caniuse-lite/data/features/getorganizeCalculationsdstyle.js1716790439806603309 0
 105/home/rafa-net/I_DONT_BELIEVE_IT/calculator/node_modules/caniuse-lite/data/features/insertadjacenthtml.js1716790439867602218 0
 102/home/rafa-net/I_DONT_BELIEVE_IT/calculator/node_modules/caniuse-lite/data/features/css-crisp-edges.js1716790439564607637 0
 106/home/rafa-net/I_DONT_BELIEVE_IT/calculator/node_modules/caniuse-lite/data/features/background-img-opts.js1716790439380610927 0
@@ -8320,7 +8320,7 @@
 100/home/rafa-net/I_DONT_BELIEVE_IT/calculator/node_modules/@parcel/transformer-svg/src/dependencies.js1716790440222595870 0
 106/home/rafa-net/I_DONT_BELIEVE_IT/calculator/node_modules/@parcel/optimizer-htmlnano/node_modules/.bin/svgo1716790444129526004 0
 107/home/rafa-net/I_DONT_BELIEVE_IT/calculator/node_modules/@parcel/optimizer-htmlnano/node_modules/css-select1716790443766532496 1
-88/home/rafa-net/I_DONT_BELIEVE_IT/calculator/node_modules/caniuse-lite/data/regions/ST.js1716790440132597479 0
+88/home/rafa-net/I_DONT_BELIEVE_IT/calculator/node_modules/caniuse-lite/data/regions/state.js1716790440132597479 0
 123/home/rafa-net/I_DONT_BELIEVE_IT/calculator/node_modules/@parcel/optimizer-svgo/node_modules/csso/lib/replace/Percentage.js1716790443810531709 0
 115/home/rafa-net/I_DONT_BELIEVE_IT/calculator/node_modules/@parcel/optimizer-htmlnano/node_modules/css-select/LICENSE1716790443697533729 0
 120/home/rafa-net/I_DONT_BELIEVE_IT/calculator/node_modules/@parcel/optimizer-htmlnano/node_modules/css-select/lib/types.js1716790443750532782 0

@@ -1,67 +1,74 @@
-import { ST } from "../state.js";
-import { updateDisplay } from "../display.js";
+import { state } from "../state.js";
 
 function clearAll() {
-  ST.firstNumber = null;
-  ST.operator = null;
-  ST.secondNumber = null;
-  ST.awaitingNewInput = null;
-  ST.lastOperator = null;
-  ST.lastOperand = null;
-  ST.repeatLastOperation = false;
-  ST.memoryNumber = 0;
-  ST.memoryRecallPressed = 0;
-  ST.memoryPlusPressed = 0;
-  ST.memoryMinusPressed = 0;
-  ST.grandTotal = 0;
-  ST.displayValue = "";
+  state.firstNumber = null;
+  state.operator = null;
+  state.secondNumber = null;
+  state.previousOperand = null;
+  state.previousOperator = null;
+  state.awaitingNewInput = false;
+  state.repeatLastOperation = false;
+  state.sqrtLastOperation = false;
+  state.numberBox = "";
+  state.memoryNumber = 0;
+  state.memoryRecallPressed = 0;
+  state.memoryPlusPressed = 0;
+  state.memoryMinusPressed = 0;
+  state.grandTotal = 0;
   displayText.innerHTML = "0";
 }
 
 function clearEntry() {
-  displayText.innerHTML = "0";
-  ST.displayValue = "";
-  if (ST.operator) {
-    ST.secondNumber = null;
-  } else {
-    ST.firstNumber = null;
+    displayText.innerHTML = "0";
+    state.numberBox = "";
+    if (!state.operator) {
+      state.firstNumber = null;
+    } else {
+      state.secondNumber = null;
+    }
   }
-}
 
 function clearOne() {
   if (displayText.innerHTML.length === 1 || displayText.innerHTML === "0") {
-    ST.displayValue = "";
+    state.numberBox = "";
     displayText.innerHTML = "0";
-    if (ST.operator) {
-      ST.secondNumber = null;
+
+    if (state.operator) {
+      state.secondNumber = null;
     } else {
-      ST.firstNumber = null;
+      state.firstNumber = null;
     }
+
   } else {
-    ST.displayValue = displayText.innerHTML.slice(0, -1);
-    if (ST.operator) {
-      ST.secondNumber = ST.displayValue;
+    state.numberBox = displayText.innerHTML.slice(0, -1);
+
+    if (state.operator) {
+      state.secondNumber = state.numberBox;
     } else {
-      ST.firstNumber = ST.displayValue;
+      state.firstNumber = state.numberBox;
     }
-    updateDisplay(ST.displayValue);
+
+    displayRefresh(state.numberBox);
   }
 }
 
 function addPoint() {
-  if (displayText.innerHTML === "0" && !ST.displayValue.includes(".")) {
-    ST.displayValue = "0.";
+
+  if (displayText.innerHTML === "0" && !state.numberBox.includes(".")) {
+    state.numberBox = "0.";
   }
-  if (!ST.displayValue.includes(".") && ST.awaitingNewInput && ST.firstNumber !== 0) {
-    ST.displayValue = "0.";
+  if (!state.numberBox.includes(".") && state.awaitingNewInput && state.firstNumber !== 0) {
+    state.numberBox = "0.";
   }
-  if (!ST.displayValue.includes(".")) {
-    ST.displayValue += ".";
+  if (!state.numberBox.includes(".")) {
+    state.numberBox += ".";
   }
-  updateDisplay(ST.displayValue);
+
+  displayRefresh(state.numberBox);
 }
 
-function formatResult(result) {
+function processResult(result) {
+  if (result === undefined) return result + "";
   if (Number.isInteger(result)) {
     if (String(result).length > 14) {
       let processedInteger = result.toString();
@@ -81,4 +88,18 @@ function formatResult(result) {
   }
 }
 
-export { clearAll, clearEntry, clearOne, addPoint, formatResult };
+function displayRefresh(value) {
+  if (state.awaitingNewInput) {
+    displayText.innerHTML = "";
+    state.awaitingNewInput = false;
+  }
+  state.numberBox = value.toString();
+  if (state.numberBox.length > 14) {
+    state.numberBox = state.numberBox.substring(0, 14);
+  }
+  if (displayText.innerHTML !== state.numberBox) {
+    displayText.innerHTML = state.numberBox;
+  }
+}
+
+export { clearAll, clearEntry, clearOne, addPoint, processResult, displayRefresh };

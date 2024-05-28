@@ -14,7 +14,7 @@ let lastSecondNumber = null;
 let awaitingNewInput = null;
 let repeatLastOperation = false;
 let memoryNumber = "";
-let displayValue = "";
+let numberBox = "";
 let memoryRecallPressed = 0;
 let memoryPlusPressed = 0;
 let memoryMinusPressed = 0;
@@ -83,7 +83,7 @@ function applyPercentage(operator, baseValue, percentageValue) {
   }
 }
 
-function operate(op, a, b) {
+function combineAllThree(op, a, b) {
   a = parseFloat(a);
   b = parseFloat(b);
 
@@ -166,27 +166,27 @@ function handleNumber(numValue) {
     return;
   }
   if (operator === "%") {
-    displayValue += numValue
-    updateDisplay(displayValue);
+    numberBox += numValue
+    displayRefresh(numberBox);
     return;
   }
   if (awaitingNewInput || repeatLastOperation) {
-    displayValue = numValue;
-    updateDisplay(displayValue);
+    numberBox = numValue;
+    displayRefresh(numberBox);
     awaitingNewInput = false;
     repeatLastOperation = false;
   } else {
-    displayValue += numValue;
-    updateDisplay(displayValue);
+    numberBox += numValue;
+    displayRefresh(numberBox);
   }
   if (operator && displayText.innerHTML === firstNumber && secondNumber === null) {
-    displayValue = numValue;
-    updateDisplay(displayValue);
+    numberBox = numValue;
+    displayRefresh(numberBox);
   }
   if (!operator) {
-    firstNumber = displayValue;
+    firstNumber = numberBox;
   } else {
-    secondNumber = displayValue;
+    secondNumber = numberBox;
   }
   memoryRecallPressed = 0;
 }
@@ -202,16 +202,16 @@ function handleSpecial(specialValue) {
       clearOne();
       break;
     case ".":
-      if (displayText.innerHTML === "0" && !displayValue.includes(".")) {
-        displayValue = "0.";
+      if (displayText.innerHTML === "0" && !numberBox.includes(".")) {
+        numberBox = "0.";
       }
-      if (!displayValue.includes(".") && awaitingNewInput && firstNumber !== 0) {
-        displayValue = "0.";
+      if (!numberBox.includes(".") && awaitingNewInput && firstNumber !== 0) {
+        numberBox = "0.";
       }
-      if (!displayValue.includes(".")) {
-        displayValue += ".";
+      if (!numberBox.includes(".")) {
+        numberBox += ".";
       }
-      updateDisplay(displayValue);
+      displayRefresh(numberBox);
       break;
     case "=":
       handleOperator(null);
@@ -225,7 +225,7 @@ function handleOperator(symbol) {
     handleSqrtOperation();
   } else if (symbol === '%' && !operator) {
     return;
-  } else if (symbol === '%' && operator !== "%" && firstNumber !== null && displayValue !== "") {
+  } else if (symbol === '%' && operator !== "%" && firstNumber !== null && numberBox !== "") {
     handlePercentageOperation();
   } else if (symbol === null && repeatLastOperation) {
     handleRepeatLastOperation();
@@ -242,10 +242,10 @@ function handleOperator(symbol) {
 
 function handleMemory(memory) {
   if (memory === "GT") {
-    displayValue = grandTotal;
-    firstNumber = displayValue;
-    updateDisplay(displayValue);
-    displayValue = "";
+    numberBox = grandTotal;
+    firstNumber = numberBox;
+    displayRefresh(numberBox);
+    numberBox = "";
   }
   if (memoryRecallPressed > 1) {
     memoryNumber = 0;
@@ -263,11 +263,11 @@ function handleMemory(memory) {
     memoryRecallPressed = 0;
     memoryPlusPressed = 0;
     memoryMinusPressed = 0;
-    displayValue = "0";
-    updateDisplay(displayValue);
+    numberBox = "0";
+    displayRefresh(numberBox);
   } else if (memory === "MR" && memoryNumber !== 0) {
-    displayValue = memoryNumber;
-    updateDisplay(displayValue);
+    numberBox = memoryNumber;
+    displayRefresh(numberBox);
     memoryRecallPressed++;
     return;
   }
@@ -275,18 +275,18 @@ function handleMemory(memory) {
     return;
   }
   else if (memory === "M-") {
-    memoryNumber = (Number(memoryNumber) - Number(displayValue));
-    displayValue = memoryNumber.toString();
+    memoryNumber = (Number(memoryNumber) - Number(numberBox));
+    numberBox = memoryNumber.toString();
     return;
   }
 
   if (memory === "M+" && memoryPlusPressed === 0) {
-    memoryNumber = displayValue;
+    memoryNumber = numberBox;
     memoryPlusPressed++;
-    displayValue = "";
+    numberBox = "";
   } else if (memory === "M+" && memoryPlusPressed !== 0) {
-    memoryNumber = (Number(displayValue) + Number(memoryNumber));
-    displayValue = memoryNumber.toString();
+    memoryNumber = (Number(numberBox) + Number(memoryNumber));
+    numberBox = memoryNumber.toString();
     memoryPlusPressed++;
   }
 
@@ -295,52 +295,52 @@ function handleMemory(memory) {
 
 function handleSqrtOperation() {
   let result = Math.sqrt(firstNumber);
-  displayValue = result.toString();
-  updateDisplay(displayValue);
+  numberBox = result.toString();
+  displayRefresh(numberBox);
   firstNumber = result;
-  displayValue = "";
+  numberBox = "";
   awaitingNewInput = true;
   operator = null;
 }
 
 function handlePercentageOperation() {
-  let result = applyPercentage(operator, parseFloat(firstNumber), parseFloat(displayValue));
+  let result = applyPercentage(operator, parseFloat(firstNumber), parseFloat(numberBox));
   grandTotal += result;
-  displayValue = result.toString();
-  updateDisplay(displayValue);
+  numberBox = result.toString();
+  displayRefresh(numberBox);
   firstNumber = result;
-  displayValue = "";
+  numberBox = "";
   awaitingNewInput = true;
   operator = null;
 }
 
 function handleRepeatLastOperation() {
-  let result = operate(lastOperator, firstNumber, lastSecondNumber);
-  displayValue = formatResult(result);
-  result = displayValue;
-  updateDisplay(displayValue);
+  let result = combineAllThree(lastOperator, firstNumber, lastSecondNumber);
+  numberBox = processResult(result);
+  result = numberBox;
+  displayRefresh(numberBox);
   firstNumber = result;
 }
 
 function handleStandardOperation(symbol) {
-  if (operator && firstNumber !== null && displayValue !== "") {
-    secondNumber = displayValue;
-    let result = operate(operator, firstNumber, secondNumber);
-    displayValue = formatResult(result);
-    result = displayValue;
-    updateDisplay(displayValue);
+  if (operator && firstNumber !== null && numberBox !== "") {
+    secondNumber = numberBox;
+    let result = combineAllThree(operator, firstNumber, secondNumber);
+    numberBox = processResult(result);
+    result = numberBox;
+    displayRefresh(numberBox);
     firstNumber = result;
     lastSecondNumber = secondNumber;
     lastOperator = operator;
-    displayValue = "";
-  } else if (firstNumber === null && displayValue !== "") {
-    firstNumber = displayValue;
-    displayValue = "";
+    numberBox = "";
+  } else if (firstNumber === null && numberBox !== "") {
+    firstNumber = numberBox;
+    numberBox = "";
   }
   operator = symbol;
 }
 
-function formatResult(result) {
+function processResult(result) {
   if (Number.isInteger(result)) {
     if (String(result).length > 14) {
       let processedInteger = result.toString();
@@ -371,13 +371,13 @@ function clearAll() {
   memoryNumber = 0;
   memoryRecallPressed = 0;
   memoryPlusPressed = 0;
-  displayValue = "";
+  numberBox = "";
   displayText.innerHTML = "0";
 }
 
 function clearEntry() {
   displayText.innerHTML = "0";
-  displayValue = "";
+  numberBox = "";
   if (operator) {
     secondNumber = null;
   } else {
@@ -388,7 +388,7 @@ function clearEntry() {
 
 function clearOne() {
   if (displayText.innerHTML.length === 1 || displayText.innerHTML === "0") {
-    displayValue = "";
+    numberBox = "";
     displayText.innerHTML = "0";
     if (operator) {
       secondNumber = null;
@@ -396,27 +396,27 @@ function clearOne() {
       firstNumber = null;
     }
   } else {
-    displayValue = displayText.innerHTML.slice(0, -1);
+    numberBox = displayText.innerHTML.slice(0, -1);
     if (operator) {
-      secondNumber = displayValue;
+      secondNumber = numberBox;
     } else {
-      firstNumber = displayValue;
+      firstNumber = numberBox;
     }
-    updateDisplay(displayValue);
+    displayRefresh(numberBox);
   }
 }
 
-function updateDisplay(value) {
+function displayRefresh(value) {
   if (awaitingNewInput) {
     displayText.innerHTML = "";
     awaitingNewInput = false;
   }
-  displayValue = value.toString();
-  if (displayValue.length > 14) {
-    displayValue = displayValue.substring(0, 14);
+  numberBox = value.toString();
+  if (numberBox.length > 14) {
+    numberBox = numberBox.substring(0, 14);
   }
-  if (displayText.innerHTML !== displayValue) {
-    displayText.innerHTML = displayValue;
+  if (displayText.innerHTML !== numberBox) {
+    displayText.innerHTML = numberBox;
   }
 }
 

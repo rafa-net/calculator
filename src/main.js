@@ -1,6 +1,6 @@
-import { handleNumberInput, handleOperatorInput,
-  handleSpecialInput, handleMemoryInput} from './modules/keypad-inputs/index.js';
-  import { toggleDarkMode, setSizeController } from './modules/ui.js';
+import { handleNumberInput, handleOperatorInput, handleSpecialInput } 
+from './modules/input/index.js';
+import { toggleDarkMode, setSizeController } from './modules/utils.js';
   
 const displayText = document.getElementById("displayText");
 const displayDigits = document.getElementById('displayText');

@@ -33,7 +33,7 @@ Follow these simple steps to get a local copy up and running:
 
 ## Usage
 
-Operate this calculator as you would with any standard device:
+combineAllThree this calculator as you would with any standard device:
 
 1. Interact with the on-screen buttons or utilize keyboard inputs for operations.
 2. Use "CE" to clear the last entry and "AC" for resetting the calculator.
