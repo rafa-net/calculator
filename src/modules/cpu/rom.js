@@ -65,9 +65,9 @@ function addPoint() {
 function processResult(result) {
   if (result === undefined) return result + "";
   if (Number.isInteger(result)) {
-    if (String(result).length > 14) {
+    if (String(result).length > 10) {
       let processedInteger = result.toString();
-      processedInteger = processedInteger.substring(0, 14);
+      processedInteger = processedInteger.substring(0, 10);
       return processedInteger;
     }
     return result.toString();
@@ -89,8 +89,8 @@ function displayRefresh(value) {
     state.awaitingNewInput = false;
   }
   state.numberBox = value.toString();
-  if (state.numberBox.length > 14) {
-    state.numberBox = state.numberBox.substring(0, 14);
+  if (state.numberBox.length > 10) {
+    state.numberBox = state.numberBox.substring(0, 10);
   }
   if (displayText.innerHTML !== state.numberBox) {
     displayText.innerHTML = state.numberBox;

@@ -1,5 +1,4 @@
 import * as CMD from "../cpu/rom.js";
-import { handleOperatorInput } from "./operator.js";
 
 export function handleSpecialInput(specialValue) {
   switch (specialValue) {
