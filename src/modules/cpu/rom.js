@@ -8,12 +8,7 @@ function clearAll() {
   state.previousOperator = null;
   state.awaitingNewInput = false;
   state.repeatLastOperation = false;
-  state.sqrtLastOperation = false;
   state.numberBox = "";
-  state.memoryNumber = 0;
-  state.memoryRecallPressed = 0;
-  state.memoryPlusPressed = 0;
-  state.memoryMinusPressed = 0;
   state.grandTotal = 0;
   displayText.innerHTML = "0";
 }
