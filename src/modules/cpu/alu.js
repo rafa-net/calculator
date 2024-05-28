@@ -66,7 +66,8 @@ function organizeCalculations(symbol) {
 
 function handlePercentage() {
   let result = null;
-
+  state.previousOperand = state.firstNumber;
+  state.previousOperator = state.operator;
   result = applyPercentage(state.operator, state.firstNumber, state.numberBox);
   finalizeOperation(result, "%");
 }
@@ -79,10 +80,12 @@ function handleRepeatedEquals() {
   } else {
     result = combineAllThree(state.previousOperator, state.firstNumber, state.previousOperand);
   }
-  finalizeOperation(result, "===");
+  finalizeOperation(result, "sequentialEquality");
 }
 
 function handleSquareRoot() {
+  state.previousOperand = state.firstNumber;
+  state.previousOperator = state.operator;
   let result = Math.sqrt(parseFloat(state.firstNumber));
   finalizeOperation(result, "sqrt");
 }
@@ -93,21 +96,17 @@ function finalizeOperation(result, operation) {
   if (operation === "=" && state.operator === "*") {
     state.previousOperand = state.firstNumber;
     state.previousOperator = state.operator;
-  } else if (operation === "=" && (state.operator === "+" || state.operator == "-" || state.operator === "/")) {
+  } else if (operation === "=" && (state.operator === "+" || state.operator === "-" || state.operator === "/")) {
     state.previousOperand = state.secondNumber;
     state.previousOperator = state.operator;
   }
-  if (operation === "sqrt" || operation === "%") {
-    state.operator = state.previousOperator;
-  } else {
-    state.operator = operation;
-  }
-
+  
   state.numberBox = processResult(result);
   displayRefresh(state.numberBox);
   state.firstNumber = state.numberBox;
   state.numberBox = "";
   state.awaitingNewInput = true;
+  state.operator = operation;
 }
 
 export { organizeCalculations, handlePercentage, handleRepeatedEquals, handleSquareRoot }

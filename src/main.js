@@ -41,7 +41,6 @@ document.addEventListener('keyup', (e) => {
   }
 });
 
-
 toggleDarkMode();
 setSizeController();
 

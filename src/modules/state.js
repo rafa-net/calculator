@@ -4,6 +4,7 @@ export const state = {
   secondNumber: null,
   previousOperand: null,
   previousOperator: null,
+  previousOperation: null,
   awaitingNewInput: false,
   repeatLastOperation: false,
   numberBox: "",
