@@ -1,16 +1,24 @@
-# Calculator Project
+# Calculator
 
-This repository contains the source code for a simple yet powerful calculator web application. This is the capstone project of the Foundations Course at [The Odin Project](https://www.theodinproject.com/), an amazing open-source resource for learning web development.
+This is the capstone project of the Foundations Course at [The Odin Project](https://www.theodinproject.com/), an amazing open-source resource for learning web development.
+
+What I've produced is a based off of how my own cheap pocket calculator does math. A lot of testing has been done, but bugs might still be present. Even though the project requires the calculator to handle only one pair of numbers at a time, I have cheated, because I wanted the user to get some results by pressing `=` repeatedly.  
+
+With physical calculators, some operations are optimized for the consumer's (who is not a mathematician or an engineer) day-to-day usage, including [percentages](https://devblogs.microsoft.com/oldnewthing/20080110-00/?p=23853). 
 
 ## Overview
 
-I've made this to show my skills in HTML, CSS, and JavaScript, demonstrating my ability to create functional, interactive web applications. This calculator not only supports basic arithmetic operations but also integrates advanced features for enhanced usability.
+I've made this to train my HTML, CSS, and JavaScript.
 
 ### Features
 
 - **Basic Arithmetic**: Perform addition, subtraction, multiplication, and division.
 - **Extended Functionality**: Supports floating-point calculations and error handling for a robust user experience.
-- **Memory Functions**: Mimics the functionality of a physical calculator with options to clear the current entry (CE) and reset all operations (AC).
+- **Memory Functions**: Mimics the functionality of a physical calculator with buttons such as:
+  - **M**emory Addition (`M+`); 
+  - **M**emory Subtraction (`M-`);
+  - **C**lear **E**ntry (`CE`); 
+  - **A**ll **C**lear (`AC`);
 - **Responsive Design**: Fully functional on both desktop and mobile devices.
 - **Keyboard Support**: Facilitates keyboard input for improved accessibility and ease of use.
 
@@ -26,17 +34,20 @@ Follow these simple steps to get a local copy up and running:
 ### Installation
 
 1. Clone the repo:
-   ```sh
+   ```bash
    git clone https://github.com/rafa-net/calculator.git
    ```
 2. Open the `index.html` file in your web browser to start using the calculator.
 
 ## Usage
 
-combineAllThree this calculator as you would with any standard device:
+Click on the numbers as you would with the Windows calculator. Keyboard mappings are as follows:
 
-1. Interact with the on-screen buttons or utilize keyboard inputs for operations.
-2. Use "CE" to clear the last entry and "AC" for resetting the calculator.
+- `Shift + A` clears everything (including memory)
+- `Shift + C` clears the current entry, but keeps the first number in the operation so you can correct the second one
+- `Backspace` deletes the last digit from the on-screen number
+- `Shift + S` does square roots
+- `Shift + P` does powers of two
 
 ## Contributing
 
