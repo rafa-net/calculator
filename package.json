@@ -28,6 +28,7 @@
   },
   "homepage": "https://github.com/rafa-net/calculator#readme",
   "dependencies": {
+    "mathjs": "^12.4.2",
     "puppeteer": "^22.10.0"
   }
 }
