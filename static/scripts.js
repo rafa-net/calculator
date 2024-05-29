@@ -83,7 +83,7 @@ function applyPercentage(operator, baseValue, percentageValue) {
   }
 }
 
-function combineAllThree(op, a, b) {
+function computeAllThree(op, a, b) {
   a = parseFloat(a);
   b = parseFloat(b);
 
@@ -315,7 +315,7 @@ function handlePercentageOperation() {
 }
 
 function handleRepeatLastOperation() {
-  let result = combineAllThree(lastOperator, firstNumber, lastSecondNumber);
+  let result = computeAllThree(lastOperator, firstNumber, lastSecondNumber);
   numberBox = processResult(result);
   result = numberBox;
   displayRefresh(numberBox);
@@ -325,7 +325,7 @@ function handleRepeatLastOperation() {
 function handleStandardOperation(symbol) {
   if (operator && firstNumber !== null && numberBox !== "") {
     secondNumber = numberBox;
-    let result = combineAllThree(operator, firstNumber, secondNumber);
+    let result = computeAllThree(operator, firstNumber, secondNumber);
     numberBox = processResult(result);
     result = numberBox;
     displayRefresh(numberBox);

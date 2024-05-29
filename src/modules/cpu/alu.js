@@ -2,43 +2,41 @@ import { state } from "../state.js";
 import { displayRefresh } from "../cpu/rom.js";
 import { processResult } from "./rom.js";
 
-function combineAllThree(op, a, b) {
+function computeAllThree(op, a, b) {
   a = parseFloat(a);
   b = parseFloat(b);
 
-  if (op === "+") {
-    return a + b;
-  } else if (op === "-") {
-    return a - b;
-  } else if (op === "*") {
-    return a * b;
-  } else if (op === "/") {
-    if (b === 0) {
-      alert(`Oops! Dividing ${a} by ${b} is like trying to split zero cookies among friends—it just doesn't work. Try a different divisor.`);
-      return 0;
-    }
-    return a / b;
+  switch (op) {
+    case "+":
+      return a + b;
+    case "-":
+      return a - b;
+    case "*":
+      return a * b;
+    case "/":
+      return b === 0 ? 0 : a / b;
   }
 }
-
-function applyPercentage(operator, baseValue, percentageValue) {
+function applyPercentage(op, num, pctValue) {
   
-  baseValue = parseFloat(baseValue);
-  percentageValue = parseFloat(percentageValue);
+  num = parseFloat(num);
+  pctValue = parseFloat(pctValue);
 
   let result = null;
-  let percentageDecimal = percentageValue / 100;
+  let decimalEquivalent = pctValue / 100;
   
-  switch (operator) {
+  switch (op) {
+      // This yields x +
     case '+':
     case '-':
-      result = baseValue * percentageDecimal;
-      return operator === '-' ? baseValue - result : baseValue + result;
+      result = num * decimalEquivalent;
+      return op === '-' ? num - result : num + result;
+      // Example: x is 20% of 225. This yields x.
     case '*':
-      result = baseValue * percentageDecimal;
+      result = num * decimalEquivalent;
       return result;
-    case '/':
-      result = baseValue / percentageDecimal;
+    case '/': // Example: 35 is 50% of x. This yields x.
+      result = num / decimalEquivalent;
       return result;
     default:
       return;
@@ -49,7 +47,7 @@ function organizeCalculations(symbol) {
 
   if (state.operator && state.firstNumber !== null && state.numberBox !== "") {
     state.secondNumber = state.numberBox;
-    let result = combineAllThree(state.operator, state.firstNumber, state.secondNumber);
+    let result = computeAllThree(state.operator, state.firstNumber, state.secondNumber);
 
     finalizeOperation(result, symbol);
   } 
@@ -76,9 +74,9 @@ function handleRepeatedEquals() {
   let result = 0;
 
   if (state.previousOperator === "*") {
-    result = combineAllThree(state.previousOperator, state.previousOperand, state.firstNumber);
+    result = computeAllThree(state.previousOperator, state.previousOperand, state.firstNumber);
   } else {
-    result = combineAllThree(state.previousOperator, state.firstNumber, state.previousOperand);
+    result = computeAllThree(state.previousOperator, state.firstNumber, state.previousOperand);
   }
   finalizeOperation(result, "sequentialEquality");
 }
