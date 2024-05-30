@@ -2,7 +2,7 @@
 
 This is the capstone project of the Foundations Course at [The Odin Project](https://www.theodinproject.com/), an amazing open-source resource for learning web development.
 
-What I've produced is a based off of how my own cheap pocket calculator does math. A lot of testing has been done, but bugs might still be present. Even though the project requires the calculator to handle only one pair of numbers at a time, I have cheated, because I wanted the user to get some results by pressing `=` repeatedly.  
+What I've produced is a based off of how my own cheap pocket calculator does  A lot of testing has been done, but bugs might still be present. Even though the project requires the calculator to handle only one pair of numbers at a time, I have cheated, because I wanted the user to get some results by pressing `=` repeatedly.  
 
 With physical calculators, some operations are optimized for the consumer's (who is not a mathematician or an engineer) day-to-day usage, including [percentages](https://devblogs.microsoft.com/oldnewthing/20080110-00/?p=23853). 
 

@@ -17,14 +17,15 @@
   <div id="container" class="container">
 
     <div id="display" class="display">
-      <div id="display-numbers">
+
       <span id="smallDisplayText">
-        22
+        
       </span>
+
       <span id="displayText">
         0
       </span>
-      </div>
+    
     </div>
 
     <div id="calculator" class="calculator">
@@ -42,11 +43,11 @@
                   <button class="button" tabindex="0" data-key="C" data-value="CE">±</button> -->
 
       <button id="allClear" class="button special" tabindex="0" data-key="A" data-value="AC">AC</button>
-      <button class="button memory" tabindex="0" data-key="!" data-value="M+">M+</button>
-      <button class="button memory" tabindex="0" data-key="@" data-value="M-">M-</button>
-      <button class="button memory" tabindex="0" data-key="#" data-value="MR">MR</button>
-      <button class="button memory" tabindex="0" data-key="$" data-value="GT">GT</button>
-      <button class="button special clear" tabindex="0" data-key="C" data-value="CE">CE</button>
+      <button class="button operator" tabindex="0" data-key="(" data-value="(">(</button>
+      <button class="button operator" tabindex="0" data-key=")" data-value=")">)</button>
+      <button class="button operator" tabindex="0" data-key="#" data-value="MR">MR</button>
+      <button class="button operator" tabindex="0" data-key="$" data-value="GT">GT</button>
+      <button class="button special" tabindex="0" data-key="^" data-value="^">x<sup>y</sup></button>
       <button class="button number" tabindex="0" data-key="7" data-value="7">7</button>
       <button class="button number" tabindex="0" data-key="8" data-value="8">8</button>
       <button class="button number" tabindex="0" data-key="9" data-value="9">9</button>
@@ -61,11 +62,11 @@
       <button class="button number" tabindex="0" data-key="2" data-value="2">2</button>
       <button class="button number" tabindex="0" data-key="3" data-value="3">3</button>
       <button class="button operator" tabindex="0" data-key="-" data-value="-">−</button>
-      <button class="button operator" tabindex="0" data-key="R" data-value="sqrt">√</button>
+      <button id="sqrt" class="button operator" tabindex="0" data-key="R" data-value="sqrt">√</button>
       <button class="button number" tabindex="0" data-key="0" data-value="0">0</button>
       <button class="button number" tabindex="0" data-key="" data-value="00">00</button>
       <button class="button special point" tabindex="0" data-key="." data-value=".">.</button>
-      <button class="button operator" tabindex="0" data-key="=" data-value="=">=</button>
+      <button class="button special equals" tabindex="0" data-key="=" data-value="=">=</button>
       <button class="button operator" tabindex="0" data-key="+" data-value="+">+</button>
     </div>
   </div>
@@ -73,6 +74,7 @@
     <div id="right-content">
       <p>back</p>
       <input type="range" id="scale-slider" min="0.5" max="1" step="0.005" value="0.75">
+      <script src="math.js" type="text/javascript"></script>
       <script src="scripts.js"></script>
       <div>calculator size</div>
     </div>

@@ -1,5 +1,6 @@
 const allButtons = document.querySelectorAll(".button:not(#color-scheme-toggle)");
-const displayDigits = document.getElementById("displayText");
+const displayText = document.getElementById("displayText");
+const smallDisplayText = document.getElementById("smallDisplayText")
 let firstNumber = null;
 let operator = null;
 let secondNumber = null;
@@ -53,20 +54,20 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
   allButtons.forEach(button => {
-    button.addEventListener("click", e => getUserInput(e, displayDigits));
+    button.addEventListener("click", (e) => write(e, displayText))
     button.addEventListener("mousedown", () => {
       button.classList.add('keyboard-active');
-      displayDigits.classList.add('display-blink');
+      displayText.classList.add('display-blink');
     });
 
     button.addEventListener("mouseup", () => {
       button.classList.remove('keyboard-active');
-      displayDigits.classList.remove('display-blink');
+      displayText.classList.remove('display-blink');
     });
 
     button.addEventListener("mouseleave", () => {
       button.classList.remove('keyboard-active');
-      displayDigits.classList.remove('display-blink');
+      displayText.classList.remove('display-blink');
     });
   });
 
@@ -75,7 +76,7 @@ document.addEventListener('DOMContentLoaded', function () {
     if (buttonPressed) {
       buttonPressed.click();
       buttonPressed.classList.add('keyboard-active');
-      displayDigits.classList.add('display-blink');
+      displayText.classList.add('display-blink');
     }
   });
 
@@ -83,307 +84,323 @@ document.addEventListener('DOMContentLoaded', function () {
     const buttonPressed = document.querySelector(`.button[data-key="${e.key}"]`);
     if (buttonPressed) {
       buttonPressed.classList.remove('keyboard-active');
-      displayDigits.classList.remove('display-blink');
+      displayText.classList.remove('display-blink');
     }
   });
-
 });
 
-function getUserInput(e) {
-  if (target.classList.contains("number")) {
-    handleNumberInput(value);
-  } else if (target.classList.contains("special")) {
-    handleSpecialInput(value);
-  } else if (target.classList.contains("operator")) {
-    handleOperatorInput(value);
-  } else if (target.classList.contains("memory")) {
-    handleMemoryInput(value);
-  }
-}
+let result = "0";
 
-import { state } from "../state.js";
-import { displayRefresh } from "../cpu/rom.js";
-
-// zero against zero won't work
-export function handleNumberInput(number) {
-
-  if ((number === "0" || number === "00") &&
+function write(e) {
+  let input = e.target.dataset.value;
+  let el = e.target;
+  if (el.classList.contains("special")) {
+    specialInput(input);
+    return;
+  } else if
+    ((input === "0" || input === "00") &&
     displayText.innerHTML === "0" &&
-    !state.numberBox.includes(".")) {
+    !numberBox.includes(".")) {
     return;
   }
-
-  if (state.awaitingNewInput || state.repeatLastOperation) {
-    state.numberBox = "";
-    state.awaitingNewInput = false;
-    state.repeatLastOperation = false;
-  }
-
-  state.numberBox += number;
-  displayRefresh(state.numberBox);
-
-  if (!state.operator) {
-    state.firstNumber = state.numberBox;
-  } else {
-    state.secondNumber = state.numberBox;
-  }
-
+  numberBox += input;
+  displayRefresh(numberBox);
 }
 
-import * as MATH from "../cpu/alu.js";
-import { state } from "../state.js";
-
-export function handleOperatorInput(symbol) {
-  if (symbol === "=") {
-    MATH.organizeCalculations(symbol);
-    state.repeatLastOperation ? MATH.handleRepeatedEquals("sequentialEquality") : state.repeatLastOperation = true;
-  } else {
-    state.repeatLastOperation = false;
-    if (symbol === "%") {
-      MATH.handlePercentage();
-    } else if (symbol === "sqrt") {
-      MATH.handleSquareRoot();
-    } else {
-      MATH.organizeCalculations(symbol);
-    }
-  }
-  state.awaitingNewInput = true;
-}
-import * as CMD from "../cpu/rom.js";
-
-export function handleSpecialInput(specialValue) {
+function specialInput(specialValue) {
   switch (specialValue) {
     case "AC":
-      CMD.clearAll();
+      clearAll();
       break;
     case "CE":
-      CMD.clearEntry();
+      clearEntry();
     case "bksp":
-      CMD.clearOne();
+      clearOne();
       break;
     case ".":
-      CMD.addPoint();
+      addPoint();
+      break;
+    case "=":
+      compute();
       break;
   }
 }
 
-import { state } from "../state.js";
+function compute() {
+  result = math.evaluate(numberBox);
+  displayText.classList.add('bigToSmall');
 
-function clearAll() {
-  state.firstNumber = null;
-  state.operator = null;
-  state.secondNumber = null;
-  state.previousOperand = null;
-  state.previousOperator = null;
-  state.awaitingNewInput = false;
-  state.repeatLastOperation = false;
-  state.numberBox = "";
-  state.grandTotal = 0;
-  displayText.innerHTML = "0";
-}
-
-function clearEntry() {
-  displayText.innerHTML = "0";
-  state.numberBox = "";
-  if (!state.operator) {
-    state.firstNumber = null;
-  } else {
-    state.secondNumber = null;
-  }
-}
-
-function clearOne() {
-  if (displayText.innerHTML.length === 1 || displayText.innerHTML === "0") {
-    state.numberBox = "";
-    displayText.innerHTML = "0";
-
-    if (state.operator) {
-      state.secondNumber = null;
-    } else {
-      state.firstNumber = null;
-    }
-
-  } else {
-    state.numberBox = displayText.innerHTML.slice(0, -1);
-
-    if (state.operator) {
-      state.secondNumber = state.numberBox;
-    } else {
-      state.firstNumber = state.numberBox;
-    }
-
-    displayRefresh(state.numberBox);
-  }
-}
-
-function addPoint() {
-
-  if (displayText.innerHTML === "0" && !state.numberBox.includes(".")) {
-    state.numberBox = "0.";
-  }
-  if (!state.numberBox.includes(".") && state.awaitingNewInput && state.firstNumber !== 0) {
-    state.numberBox = "0.";
-  }
-  if (!state.numberBox.includes(".")) {
-    state.numberBox += ".";
-  }
-
-  displayRefresh(state.numberBox);
-}
-
-function processResult(result) {
-  if (result === undefined) return result + "";
-  if (Number.isInteger(result)) {
-    if (String(result).length > 10) {
-      let processedInteger = result.toString();
-      processedInteger = processedInteger.substring(0, 10);
-      return processedInteger;
-    }
-    return result.toString();
-  } else {
-    let resultString = result.toString();
-    let [integerPart, fractionalPart] = resultString.split(".");
-    fractionalPart = fractionalPart || "";
-    let maxDecimalPlaces = 13 - (integerPart.length);
-    if (maxDecimalPlaces < 0) {
-      maxDecimalPlaces = 0;
-    }
-    return result.toFixed(maxDecimalPlaces);
-  }
+  // Use a timeout to wait for the animation to complete before updating the text
+  setTimeout(() => {
+    smallDisplayText.innerHTML = displayText.innerHTML;
+    displayText.innerHTML = "";
+    displayRefresh(result);
+  }, 1000);
 }
 
 function displayRefresh(value) {
-  if (state.awaitingNewInput) {
-    displayText.innerHTML = "";
-    state.awaitingNewInput = false;
+  numberBox = value.toString();
+  if (numberBox.length > 10) {
+    numberBox = numberBox.substring(0, 10);
   }
-  state.numberBox = value.toString();
-  if (state.numberBox.length > 10) {
-    state.numberBox = state.numberBox.substring(0, 10);
-  }
-  if (displayText.innerHTML !== state.numberBox) {
-    displayText.innerHTML = state.numberBox;
+  if (displayText.innerHTML !== numberBox) {
+    displayText.innerHTML = numberBox;
+    // displayText.classList.remove('bigToSmall');
   }
 }
 
-export { clearAll, clearEntry, clearOne, addPoint, processResult, displayRefresh };
 
+// function getUserInput(e) {
+//   if (e.target.classList.contains("number")) {
+//     handleNumberInput(e.target.dataset.value);
+//   } else if (e.target.classList.contains("special")) {
+//     handleSpecialInput(e.target.dataset.value);
+//   } else if (e.target.classList.contains("operator")) {
+//     handleOperatorInput(e.target.dataset.value);
+//   }
+// }
 
-import { state } from "../state.js";
-import { displayRefresh } from "../cpu/rom.js";
-import { processResult } from "./rom.js";
+// zero against zero won't work
+// function handleNumberInput(number) {
 
-function computeAllThree(op, a, b) {
-  a = parseFloat(a);
-  b = parseFloat(b);
+//   if ((number === "0" || number === "00") &&
+//     displayText.innerHTML === "0" &&
+//     !numberBox.includes(".")) {
+//     return;
+//   }
 
-  switch (op) {
-    case "+":
-      return a + b;
-    case "-":
-      return a - b;
-    case "*":
-      return a * b;
-    case "/":
-      return b === 0 ? 0 : a / b;
-  }
-}
-function applyPercentage(op, num, pctValue) {
+//   if (awaitingNewInput || repeatLastOperation) {
+//     numberBox = "";
+//     awaitingNewInput = false;
+//     repeatLastOperation = false;
+//   }
 
-  num = parseFloat(num);
-  pctValue = parseFloat(pctValue);
+//   numberBox += number;
+//   displayRefresh(numberBox);
 
-  let result = null;
-  let decimalEquivalent = pctValue / 100;
+//   if (!operator) {
+//     firstNumber = numberBox;
+//   } else {
+//     secondNumber = numberBox;
+//   }
 
-  switch (op) {
-    // This yields x +
-    case '+':
-    case '-':
-      result = num * decimalEquivalent;
-      return op === '-' ? num - result : num + result;
-    // Example: x is 20% of 225. This yields x.
-    case '*':
-      result = num * decimalEquivalent;
-      return result;
-    case '/': // Example: 35 is 50% of x. This yields x.
-      result = num / decimalEquivalent;
-      return result;
-    default:
-      return;
-  }
-}
+// }
 
-function organizeCalculations(symbol) {
+// function handleOperatorInput(symbol) {
+//   if (symbol === "=") {
+//     organizeCalculations(symbol);
+//     repeatLastOperation ? handleRepeatedEquals("sequentialEquality") : repeatLastOperation = true;
+//   } else {
+//     repeatLastOperation = false;
+//     if (symbol === "%") {
+//       handlePercentage();
+//     } else if (symbol === "sqrt") {
+//       handleSquareRoot();
+//     } else {
+//       organizeCalculations(symbol);
+//     }
+//   }
+//   awaitingNewInput = true;
+// }
 
-  if (state.operator && state.firstNumber !== null && state.numberBox !== "") {
-    state.secondNumber = state.numberBox;
-    let result = computeAllThree(state.operator, state.firstNumber, state.secondNumber);
+// function handleSpecialInput(specialValue) {
+//   switch (specialValue) {
+//     case "AC":
+//       clearAll();
+//       break;
+//     case "CE":
+//       clearEntry();
+//     case "bksp":
+//       clearOne();
+//       break;
+//     case ".":
+//       addPoint();
+//       break;
+//   }
+// }
 
-    finalizeOperation(result, symbol);
-  }
-
-  // if we still have numbers in the number box, give them to operand one
-  else if (state.firstNumber === null && state.numberBox !== "") {
-    state.firstNumber = state.numberBox;
-    state.numberBox = "";
-    state.awaitingNewInput = true;
-  }
-
-  state.operator = symbol;
-}
-
-function handlePercentage() {
-  let result = null;
-  state.previousOperand = state.firstNumber;
-  state.previousOperator = state.operator;
-  result = applyPercentage(state.operator, state.firstNumber, state.numberBox);
-  finalizeOperation(result, "%");
-}
-
-function handleRepeatedEquals() {
-  let result = 0;
-
-  if (state.previousOperator === "*") {
-    result = computeAllThree(state.previousOperator, state.previousOperand, state.firstNumber);
-  } else {
-    result = computeAllThree(state.previousOperator, state.firstNumber, state.previousOperand);
-  }
-  finalizeOperation(result, "sequentialEquality");
+function clearAll() {
+  numberBox = "";
+  displayText.innerHTML = "0";
 }
 
-function handleSquareRoot() {
-  state.previousOperand = state.firstNumber;
-  state.previousOperator = state.operator;
-  let result = Math.sqrt(parseFloat(state.firstNumber));
-  finalizeOperation(result, "sqrt");
-}
+// function clearEntry() {
+//   displayText.innerHTML = "0";
+//   numberBox = "";
+//   if (!operator) {
+//     firstNumber = null;
+//   } else {
+//     secondNumber = null;
+//   }
+// }
 
-function finalizeOperation(result, operation) {
+// function clearOne() {
+//   if (displayText.innerHTML.length === 1 || displayText.innerHTML === "0") {
+//     numberBox = "";
+//     displayText.innerHTML = "0";
 
-  // the aim is to capture only the first equals press
-  if (operation === "=" && state.operator === "*") {
-    state.previousOperand = state.firstNumber;
-    state.previousOperator = state.operator;
-  } else if (operation === "=" && (state.operator === "+" || state.operator === "-" || state.operator === "/")) {
-    state.previousOperand = state.secondNumber;
-    state.previousOperator = state.operator;
-  }
+//     if (operator) {
+//       secondNumber = null;
+//     } else {
+//       firstNumber = null;
+//     }
 
-  state.numberBox = processResult(result);
-  displayRefresh(state.numberBox);
-  state.firstNumber = state.numberBox;
-  state.numberBox = "";
-  state.awaitingNewInput = true;
-  state.operator = operation;
-}
+//   } else {
+//     numberBox = displayText.innerHTML.slice(0, -1);
 
-export { organizeCalculations, handlePercentage, handleRepeatedEquals, handleSquareRoot }
+//     if (operator) {
+//       secondNumber = numberBox;
+//     } else {
+//       firstNumber = numberBox;
+//     }
+
+//     displayRefresh(numberBox);
+//   }
+// }
+
+// function addPoint() {
+
+//   if (displayText.innerHTML === "0" && !numberBox.includes(".")) {
+//     numberBox = "0.";
+//   }
+//   if (!numberBox.includes(".") && awaitingNewInput && firstNumber !== 0) {
+//     numberBox = "0.";
+//   }
+//   if (!numberBox.includes(".")) {
+//     numberBox += ".";
+//   }
+
+//   displayRefresh(numberBox);
+// }
+
+// function processResult(result) {
+//   if (result === undefined) return result + "";
+//   if (Number.isInteger(result)) {
+//     if (String(result).length > 10) {
+//       let processedInteger = result.toString();
+//       processedInteger = processedInteger.substring(0, 10);
+//       return processedInteger;
+//     }
+//     return result.toString();
+//   } else {
+//     let resultString = result.toString();
+//     let [integerPart, fractionalPart] = resultString.split(".");
+//     fractionalPart = fractionalPart || "";
+//     let maxDecimalPlaces = 13 - (integerPart.length);
+//     if (maxDecimalPlaces < 0) {
+//       maxDecimalPlaces = 0;
+//     }
+//     return result.toFixed(maxDecimalPlaces);
+//   }
+// }
 
 
 
+// function computeAllThree(op, a, b) {
+//   a = parseFloat(a);
+//   b = parseFloat(b);
 
+//   switch (op) {
+//     case "+":
+//       return a + b;
+//     case "-":
+//       return a - b;
+//     case "*":
+//       return a * b;
+//     case "/":
+//       return b === 0 ? 0 : a / b;
+//   }
+// }
 
+// function applyPercentage(op, num, pctValue) {
+
+//   num = parseFloat(num);
+//   pctValue = parseFloat(pctValue);
+
+//   let result = null;
+//   let decimalEquivalent = pctValue / 100;
+
+//   switch (op) {
+//     // This yields x +
+//     case '+':
+//     case '-':
+//       result = num * decimalEquivalent;
+//       return op === '-' ? num - result : num + result;
+//     // Example: x is 20% of 225. This yields x.
+//     case '*':
+//       result = num * decimalEquivalent;
+//       return result;
+//     case '/': // Example: 35 is 50% of x. This yields x.
+//       result = num / decimalEquivalent;
+//       return result;
+//     default:
+//       return;
+//   }
+// }
+
+// function organizeCalculations(symbol) {
+
+//   if (operator && firstNumber !== null && numberBox !== "") {
+//     secondNumber = numberBox;
+//     let result = computeAllThree(operator, firstNumber, secondNumber);
+
+//     finalizeOperation(result, symbol);
+//   }
+
+//   // if we still have numbers in the number box, give them to operand one
+//   else if (firstNumber === null && numberBox !== "") {
+//     firstNumber = numberBox;
+//     numberBox = "";
+//     awaitingNewInput = true;
+//   }
+
+//   operator = symbol;
+// }
+
+// function handlePercentage() {
+//   let result = null;
+//   previousOperand = firstNumber;
+//   previousOperator = operator;
+//   result = applyPercentage(operator, firstNumber, numberBox);
+//   finalizeOperation(result, "%");
+// }
+
+// function handleRepeatedEquals() {
+//   let result = 0;
+
+//   if (previousOperator === "*") {
+//     result = computeAllThree(previousOperator, previousOperand, firstNumber);
+//   } else {
+//     result = computeAllThree(previousOperator, firstNumber, previousOperand);
+//   }
+//   finalizeOperation(result, "sequentialEquality");
+// }
+
+// function handleSquareRoot() {
+//   previousOperand = firstNumber;
+//   previousOperator = operator;
+//   let result = sqrt(parseFloat(firstNumber));
+//   finalizeOperation(result, "sqrt");
+// }
+
+// function finalizeOperation(result, operation) {
+
+//   // the aim is to capture only the first equals press
+//   if (operation === "=" && operator === "*") {
+//     previousOperand = firstNumber;
+//     previousOperator = operator;
+//   } else if (operation === "=" && (operator === "+" || operator === "-" || operator === "/")) {
+//     previousOperand = secondNumber;
+//     previousOperator = operator;
+//   }
+
+//   numberBox = processResult(result);
+//   displayRefresh(numberBox);
+//   firstNumber = numberBox;
+//   numberBox = "";
+//   awaitingNewInput = true;
+//   operator = operation;
+// }
 
 
 
