@@ -108,7 +108,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     numberBox += number;
     displayRefresh(numberBox);
-    operatorCheck();
+    operator ? secondNumber = numberBox : firstNumber = numberBox;
   }
 
   function handleSpecialInput(specialValue) {
@@ -235,7 +235,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function handleSquareRoot() {
     previousOperand = firstNumber;
     previousOperator = operator;
-    let result = sqrt(parseFloat(firstNumber));
+    let result = Math.sqrt(parseFloat(firstNumber));
     finalizeOperation(result, "sqrt");
   }
 

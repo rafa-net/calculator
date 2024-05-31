@@ -4,7 +4,7 @@
   "description": "Mimic of a pocket calculator",
   "main": "scripts.js",
   "scripts": {
-    "test": "node calculator.test.js"
+    "test": "node calculator.test.cjs"
   },
   "repository": {
     "type": "git",
