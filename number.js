@@ -1,5 +1,5 @@
-import { state } from "../state.js";
-import { displayRefresh } from "../cpu/rom.js";
+import { state } from "./src/modules/state.js";
+import { displayRefresh } from "./src/modules/cpu/rom.js";
 
 // zero against zero won't work
 export function handleNumberInput(number) {

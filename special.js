@@ -1,4 +1,4 @@
-import * as CMD from "../cpu/rom.js";
+import * as CMD from "./src/modules/cpu/rom.js";
 
 export function handleSpecialInput(specialValue) {
   switch (specialValue) {
