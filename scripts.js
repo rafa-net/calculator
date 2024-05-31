@@ -24,50 +24,14 @@ document.addEventListener('DOMContentLoaded', function () {
   const themeText = document.getElementById('theme-text');
   const bodyElement = document.body;
 
-  toggleButton.addEventListener('click', function () {
-
-    this.classList.toggle('dark-mode');
-    if (bodyElement.classList.contains('dark-mode') &&
-      display.classList.contains('dark-mode')
-      && themeText.classList.contains('dark-mode-text')) {
-      bodyElement.classList.remove('dark-mode');
-      bodyElement.classList.add('light-mode');
-      display.classList.remove('dark-mode');
-      display.classList.add('light-mode');
-      themeText.classList.remove('dark-mode-text');
-      themeText.classList.add('light-mode-text');
-      themeText.textContent = "light";
-    } else {
-      bodyElement.classList.remove('light-mode');
-      bodyElement.classList.add('dark-mode');
-      display.classList.remove('light-mode');
-      display.classList.add('dark-mode');
-      themeText.classList.remove('light-mode-text');
-      themeText.classList.add('dark-mode-text');
-      themeText.textContent = "dark";
-    }
-
-  });
-
-  slider.addEventListener('input', function () {
-    const calculator = document.getElementById('container');
-    const scaleValue = this.value;
-    calculator.style.transform = `scale(${scaleValue})`;
-  });
-
   allButtons.forEach(button => {
-    button.addEventListener("click", (e) => write(e, displayText))
+    button.addEventListener("click", handleUserInput);
     button.addEventListener("mousedown", () => {
       button.classList.add('keyboard-active');
       displayText.classList.add('display-blink');
     });
 
     button.addEventListener("mouseup", () => {
-      button.classList.remove('keyboard-active');
-      displayText.classList.remove('display-blink');
-    });
-
-    button.addEventListener("mouseleave", () => {
       button.classList.remove('keyboard-active');
       displayText.classList.remove('display-blink');
     });
@@ -88,6 +52,31 @@ document.addEventListener('DOMContentLoaded', function () {
       buttonPressed.classList.remove('keyboard-active');
       displayText.classList.remove('display-blink');
     }
+  });
+  toggleButton.addEventListener('click', function () {
+
+    toggleButton.classList.toggle('dark-mode');
+
+    const isDarkMode = bodyElement.classList.contains('dark-mode');
+    const newMode = isDarkMode ? 'light-mode' : 'dark-mode';
+    const newText = isDarkMode ? 'light' : 'dark';
+
+    bodyElement.classList.remove(isDarkMode ? 'dark-mode' : 'light-mode');
+    bodyElement.classList.add(newMode);
+
+    display.classList.remove(isDarkMode ? 'dark-mode' : 'light-mode');
+    display.classList.add(newMode);
+
+    themeText.classList.remove(isDarkMode ? 'dark-mode-text' : 'light-mode-text');
+    themeText.classList.add(isDarkMode ? 'light-mode-text' : 'dark-mode-text');
+    themeText.textContent = newText;
+
+  });
+
+  slider.addEventListener('input', function () {
+    const calculator = document.getElementById('container');
+    const scaleValue = this.value;
+    calculator.style.transform = `scale(${scaleValue})`;
   });
 });
 
@@ -164,6 +153,33 @@ function handleOperatorInput(symbol) {
     }
   }
   awaitingNewInput = true;
+}
+
+function handleMemoryInput(memoryValue) {
+  switch (memoryValue) {
+    case "MR":
+      if (memoryRecallPressed === 0) {
+        numberBox = memoryNumber.toString();
+        displayRefresh(numberBox);
+        memoryRecallPressed = 1;
+      } else {
+        memoryRecallPressed = 0;
+        memoryPlusPressed = 0;
+        memoryMinusPressed = 0;
+        memoryNumber = 0;
+      }
+      break;
+    case "M+":
+        memoryNumber += parseFloat(numberBox);
+      break;
+    case "M-":
+      if (memoryNumber === 0) {
+        return;
+      } else {
+        memoryNumber -= parseFloat(numberBox);
+      }
+      break;
+  }
 }
 
 // calculation functions
