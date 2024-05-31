@@ -1,7 +1,12 @@
 // variable declarations
 const allButtons = document.querySelectorAll(".button:not(#color-scheme-toggle)");
 const displayText = document.getElementById("displayText");
+const toggleButton = document.getElementById('color-scheme-toggle');
+const slider = document.getElementById('scale-slider');
+const themeText = document.getElementById('theme-text');
+const bodyElement = document.body;
 const smallDisplayText = document.getElementById("smallDisplayText")
+
 let firstNumber = null;
 let operator = null;
 let secondNumber = null;
@@ -13,16 +18,10 @@ let repeatLastOperation = false;
 let numberBox = "";
 let memoryNumber = 0;
 let memoryRecallPressed = 0;
-let memoryPlusPressed = 0;
-let memoryMinusPressed = 0;
 let grandTotal = 0;
 
 // attach event listeners to all buttons
 document.addEventListener('DOMContentLoaded', function () {
-  const toggleButton = document.getElementById('color-scheme-toggle');
-  const slider = document.getElementById('scale-slider');
-  const themeText = document.getElementById('theme-text');
-  const bodyElement = document.body;
 
   allButtons.forEach(button => {
     button.addEventListener("click", handleUserInput);
@@ -53,6 +52,7 @@ document.addEventListener('DOMContentLoaded', function () {
       displayText.classList.remove('display-blink');
     }
   });
+
   toggleButton.addEventListener('click', function () {
 
     toggleButton.classList.toggle('dark-mode');
@@ -74,9 +74,11 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
   slider.addEventListener('input', function () {
+
     const calculator = document.getElementById('container');
     const scaleValue = this.value;
     calculator.style.transform = `scale(${scaleValue})`;
+
   });
 });
 
@@ -98,28 +100,19 @@ function handleUserInput(e) {
 
 // button handlers
 function handleNumberInput(number) {
-
   if ((number === "0" || number === "00") &&
     displayText.innerHTML === "0" &&
     !numberBox.includes(".")) {
     return;
   }
-
   if (awaitingNewInput || repeatLastOperation) {
     numberBox = "";
     awaitingNewInput = false;
     repeatLastOperation = false;
   }
-
   numberBox += number;
   displayRefresh(numberBox);
-
-  if (!operator) {
-    firstNumber = numberBox;
-  } else {
-    secondNumber = numberBox;
-  }
-
+  operatorCheck();
 }
 
 function handleSpecialInput(specialValue) {
@@ -134,6 +127,9 @@ function handleSpecialInput(specialValue) {
       break;
     case ".":
       addPoint();
+      break;
+    case "=":
+      handleOperatorInput(specialValue);
       break;
   }
 }
@@ -170,7 +166,7 @@ function handleMemoryInput(memoryValue) {
       }
       break;
     case "M+":
-        memoryNumber += parseFloat(numberBox);
+      memoryNumber += parseFloat(numberBox);
       break;
     case "M-":
       if (memoryNumber === 0) {
@@ -179,49 +175,6 @@ function handleMemoryInput(memoryValue) {
         memoryNumber -= parseFloat(numberBox);
       }
       break;
-  }
-}
-
-// calculation functions
-function computeAllThree(op, a, b) {
-  a = parseFloat(a);
-  b = parseFloat(b);
-
-  switch (op) {
-    case "+":
-      return a + b;
-    case "-":
-      return a - b;
-    case "*":
-      return a * b;
-    case "/":
-      return b === 0 ? 0 : a / b;
-  }
-}
-
-function applyPercentage(op, num, pctValue) {
-
-  num = parseFloat(num);
-  pctValue = parseFloat(pctValue);
-
-  let result = null;
-  let decimalEquivalent = pctValue / 100;
-
-  switch (op) {
-    // This yields x +
-    case '+':
-    case '-':
-      result = num * decimalEquivalent;
-      return op === '-' ? num - result : num + result;
-    // Example: x is 20% of 225. This yields x.
-    case '*':
-      result = num * decimalEquivalent;
-      return result;
-    case '/': // Example: 35 is 50% of x. This yields x.
-      result = num / decimalEquivalent;
-      return result;
-    default:
-      return;
   }
 }
 
@@ -244,12 +197,23 @@ function organizeCalculations(symbol) {
   operator = symbol;
 }
 
-function handlePercentage() {
-  let result = null;
-  previousOperand = firstNumber;
-  previousOperator = operator;
-  result = applyPercentage(operator, firstNumber, numberBox);
-  finalizeOperation(result, "%");
+
+
+// calculation functions
+function computeAllThree(op, a, b) {
+  a = parseFloat(a);
+  b = parseFloat(b);
+
+  switch (op) {
+    case "+":
+      return a + b;
+    case "-":
+      return a - b;
+    case "*":
+      return a * b;
+    case "/":
+      return b === 0 ? 0 : a / b;
+  }
 }
 
 function handleRepeatedEquals() {
@@ -263,6 +227,14 @@ function handleRepeatedEquals() {
   finalizeOperation(result, "sequentialEquality");
 }
 
+function handlePercentage() {
+  let result = null;
+  previousOperand = firstNumber;
+  previousOperator = operator;
+  result = applyPercentage(operator, firstNumber, numberBox);
+  finalizeOperation(result, "%");
+}
+
 function handleSquareRoot() {
   previousOperand = firstNumber;
   previousOperator = operator;
@@ -270,9 +242,31 @@ function handleSquareRoot() {
   finalizeOperation(result, "sqrt");
 }
 
-function finalizeOperation(result, operation) {
+function applyPercentage(op, num, pctValue) {
+  num = parseFloat(num);
+  pctValue = parseFloat(pctValue);
+  let result = null;
+  let decimalEquivalent = pctValue / 100;
+  switch (op) {
+    // This yields x +
+    case '+':
+    case '-':
+      result = num * decimalEquivalent;
+      return op === '-' ? num - result : num + result;
+    // Example: x is 20% of 225. This yields x.
+    case '*':
+      result = num * decimalEquivalent;
+      return result;
+    case '/': // Example: 35 is 50% of x. This yields x.
+      result = num / decimalEquivalent;
+      return result;
+    default:
+      return;
+  }
+}
 
-  // the aim is to capture only the first equals press
+function finalizeOperation(result, operation) {
+  // the goal is to capture only the first equals press
   if (operation === "=" && operator === "*") {
     previousOperand = firstNumber;
     previousOperator = operator;
@@ -280,7 +274,6 @@ function finalizeOperation(result, operation) {
     previousOperand = secondNumber;
     previousOperator = operator;
   }
-
   numberBox = processResult(result);
   displayRefresh(numberBox);
   firstNumber = numberBox;
@@ -306,31 +299,18 @@ function clearAll() {
 function clearEntry() {
   displayText.innerHTML = "0";
   numberBox = "";
-  if (!operator) {
-    firstNumber = null;
-  } else {
-    secondNumber = null;
-  }
+  operatorCheck();
 }
 
 function clearOne() {
   if (displayText.innerHTML.length === 1 || displayText.innerHTML === "0") {
     numberBox = "";
     displayText.innerHTML = "0";
-    if (operator) {
-      secondNumber = null;
-    } else {
-      firstNumber = null;
-    }
   } else {
     numberBox = displayText.innerHTML.slice(0, -1);
-    if (operator) {
-      secondNumber = numberBox;
-    } else {
-      firstNumber = numberBox;
-    }
     displayRefresh(numberBox);
   }
+  operatorCheck();
 }
 
 function addPoint() {
@@ -381,4 +361,7 @@ function displayRefresh(value) {
   }
 }
 
+function operatorCheck() {
+  operator ? secondNumber = null : firstNumber = null;
+}
 
